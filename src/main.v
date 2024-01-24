@@ -1,7 +1,6 @@
 module main
 
 import gg
-import os
 
 enum Color {
 	not_set
@@ -22,6 +21,7 @@ enum Shape {
 struct Piece {
 	color Color
 	shape Shape
+	map_key string
 }
 
 enum SelectionState {
@@ -29,11 +29,17 @@ enum SelectionState {
 	destination_coords
 }
 
+type EnPassant = Coords | bool
+
 struct GameBoard {
 	mut:
 	table [][]Piece
-	current_player Color
-	selection_state SelectionState
+	to_play Color
+	white_oo bool // short castling
+	black_oo bool
+	white_ooo bool // long castling
+	black_ooo bool
+	en_passant EnPassant // a pawn's coords that can be captured next turn via en passant rule
 }
 
 struct App {
@@ -50,11 +56,11 @@ fn main() {
 	app.gg = gg.new_context(
 		user_data: app
 		window_title: 'Chess'
-		// init_fn: app.init_images_wrapper
+		init_fn: app.init_images_wrapper
 		// width: 1000
 		// height: 1000
-		// click_fn: click
-		// frame_fn: frame
+		click_fn: click
+		frame_fn: frame
 		// event_fn: on_event
 	)
 	app.gg.run()
