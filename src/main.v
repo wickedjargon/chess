@@ -10,7 +10,7 @@ enum Color {
 }
 
 enum Shape {
-	empty_square
+	empty_square = -1
 	rook
 	knight
 	bishop
