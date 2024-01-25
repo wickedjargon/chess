@@ -50,8 +50,8 @@ fn set_pieces(mut game_board [][]Piece) {
 
 fn new_game(mut app App) {
 	app.selection_state = .origin_coords
-
 	app.game_board.table = empty_game_board.clone()
+	app.legal_moves_game_board = empty_legal_moves_game_board.clone()
 	app.game_board.to_play = .white
 	app.game_board.white_oo = false
 	app.game_board.black_oo = false

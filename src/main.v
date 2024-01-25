@@ -19,9 +19,9 @@ enum Shape {
 }
 
 struct Piece {
-	color Color
-	shape Shape
-	map_key string
+	color Color = .not_set
+	shape Shape = .empty_square
+	map_key string = 'empty_square'
 }
 
 enum SelectionState {
@@ -47,7 +47,11 @@ struct App {
 	gg                     &gg.Context = unsafe { nil }
 	image_database         map[string]gg.Image
 	game_board             GameBoard
+	legal_moves            []Coords
+	self_check_game_board  [][]Piece
+	legal_moves_game_board [][]bool
 	selection_state        SelectionState
+	origin_coords          Coords
 }
 
 fn main() {
@@ -61,7 +65,7 @@ fn main() {
 		// height: 1000
 		click_fn: click
 		frame_fn: frame
-		// event_fn: on_event
+		event_fn: on_event
 	)
 	app.gg.run()
 }
