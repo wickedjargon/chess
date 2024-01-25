@@ -23,6 +23,7 @@ A Chess game written in V. Please feel free to contribute. All chess moves
 - [ ] drag piece from origin to destination
 - [ ] test cases
 - [ ] chess clock
+- [ ] 50-move-after-last-capture rule
 
 ## Code TODO
 - [ ] implement `post_run` key-value pair for O-O and O-O-O in `relative_coords_map`

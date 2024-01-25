@@ -62,11 +62,45 @@ fn handle_origin_coords(mut app App, origin_coords Coords) {
 	app.selection_state = .destination_coords
 }
 
+fn pawn_moved_two_spaces(game_board [][]Piece, move Move) bool {
+	return ((move.origin_coords.y == 6 && move.destination_coords.y == 4) ||
+			(move.origin_coords.y == 1 && move.destination_coords.y == 3)) &&
+		game_board.at(move.origin_coords).shape == .pawn
+}
+
+fn side_piece_is_opposite_color(game_board [][]Piece, move Move, offset int) bool {
+	if within_board(Coords{move.destination_coords.y, move.destination_coords.x + offset}) {
+		return game_board[move.destination_coords.y][move.destination_coords.x + offset].color == opposite_color(game_board.at(move.origin_coords).color)
+	} else {
+		return false
+	}
+}
+
+fn move_sets(mut game_board GameBoard, move Move) {
+	game_board.en_passant = false
+	piece := game_board.table.at(move.origin_coords)
+	if piece.shape == .king {
+		game_board.oo[piece.color.str()] = false
+		game_board.ooo[piece.color.str()] = false
+	} if move == Move{Coords{7, 4}, Coords{7, 6}} { // black king sides castling move
+		move_piece(mut game_board.table, Move{Coords{7, 7}, Coords{7, 5}})
+	} else if move == Move{Coords{0, 4}, Coords{0, 6}} {
+		move_piece(mut game_board.table, Move{Coords{0, 7}, Coords{0, 5}})
+	} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, -1) {
+			game_board.en_passant = move.destination_coords
+			dump(game_board.en_passant)
+		} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, 1) {
+			game_board.en_passant = move.destination_coords
+			dump(game_board.en_passant)
+	}
+	dump(game_board.en_passant == EnPassant(Coords{3, 0}))
+}
+
 fn handle_destination_coords(mut app App, move Move) {
+	move_sets(mut app.game_board, move)
 	move_piece(mut app.game_board.table, move)
 	app.game_board.to_play = opposite_color(app.game_board.to_play)
 	app.selection_state = .origin_coords
-	// set_post_move_sets(move_rules_map[origin_piece.map_key].post_move_sets)
 }
 
 fn handle_coords(mut app App, coords Coords) {

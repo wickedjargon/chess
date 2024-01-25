@@ -17,17 +17,18 @@ fn click(x f32, y f32, button gg.MouseButton, mut app App) {
 	square_size_y := f32(game_board_height) / f32(game_board_dimension)
 	square_size_x := f32(game_board_width) / f32(game_board_dimension)
 
-	y_coord := int(y / square_size_y)
+	mut y_coord := int(y / square_size_y)
 	x_coord := int(x / square_size_x)
 
 	if app.game_board.to_play == .black {
 		// Flip the y_coord by subtracting it from the max_y_coord
 		max_y_coord := app.game_board.table.len - 1
-		flipped_y_coord := max_y_coord - y_coord
-		handle_coords(mut app, Coords{flipped_y_coord, x_coord})
-	} else {
-		handle_coords(mut app, Coords{y_coord, x_coord})
+		y_coord = max_y_coord - y_coord
 	}
+	if y_coord < 0 || y_coord > 7 || x_coord < 0 || x_coord > 7 {
+		return
+	}
+	handle_coords(mut app, Coords{y_coord, x_coord})
 }
 
 fn (mut app App) init_images_pieces(shapes []string, color string) ! {
