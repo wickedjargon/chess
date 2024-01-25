@@ -56,14 +56,6 @@ fn move_piece(mut game_board_table [][]Piece, move Move) {
 	game_board_table[move.origin_coords.y][move.origin_coords.x] = Piece {  }
 }
 
-// fn flip_board(mut game_board_table [][]Piece) {
-// 	mut empty_game_board_table := [][]Piece{}
-// 	for y := game_board_table.len - 1; y >= 0; y-- {
-// 		empty_game_board_table << game_board_table[y]
-// 	}
-// 	game_board_table = empty_game_board_table.clone()
-// }
-
 fn handle_origin_coords(mut app App, coords Coords) {
 	app.legal_moves = get_legal_moves(app.game_board, coords)
 	set_legal_moves_game_board(mut app.legal_moves_game_board, app.legal_moves)
