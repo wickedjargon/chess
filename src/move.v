@@ -70,10 +70,14 @@ fn handle_coords(mut app App, coords Coords) {
 		move := Move {app.origin_coords, coords}
 		piece := app.game_board.table.at(move.origin_coords)
 		move_piece(mut app.game_board.table, move)
+		if app.game_board.table.at(move.origin_coords).shape == .king {
+			app.game_board.oo[piece.map_key] = false
+			app.game_board.ooo[piece.map_key] = false
+		}
 		if move == white_oo_move {
 			app.game_board.oo[piece.map_key] = false
 			app.game_board.ooo[piece.map_key] = false
-			move_piece(mut app.game_board.table, Move{Coords{7, 7}, Coords{0, 5}}) // white
+			move_piece(mut app.game_board.table, Move{Coords{7, 7}, Coords{7, 5}}) // white
 		} else if move == black_oo_move {
 			app.game_board.oo[piece.map_key] = false
 			app.game_board.ooo[piece.map_key] = false
@@ -81,6 +85,7 @@ fn handle_coords(mut app App, coords Coords) {
 		}
 		app.game_board.to_play = opposite_color(app.game_board.to_play)
 		app.selection_state = .origin_coords
+		// player selects another one of his pieces:
 	} else if app.selection_state == .destination_coords && app.game_board.table.at(coords).color == app.game_board.to_play {
 		handle_origin_coords(mut app, coords)
 	} else {

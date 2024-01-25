@@ -55,11 +55,18 @@ fn destination_no_same_color(game_board GameBoard, origin_coords Coords, destina
 	return game_board.table.at(destination_coords).color != game_board.table.at(origin_coords).color
 }
 
+// casting: // update to account for king and rook attacks
 
 fn black_oo (game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
 	return game_board.oo['black'] == true &&
 		game_board.table.at(Coords{0, 5}).shape == .empty_square &&
 		game_board.table.at(Coords{0, 6}).shape == .empty_square
+}
+
+fn white_oo (game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
+	return game_board.oo['white'] == true &&
+		game_board.table.at(Coords{7, 5}).shape == .empty_square &&
+		game_board.table.at(Coords{7, 6}).shape == .empty_square
 }
 
 // post loop conditions:

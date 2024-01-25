@@ -9,7 +9,7 @@ A Chess game written in V. Please feel free to contribute. All chess moves
 - The code of this project is released under the [MIT License](./LICENSE).
 - The contents of the assets directory is by [Ajay Karat](http://devilswork.shop/) released under the [CC BY 4.0 License](https://creativecommons.org/licenses/by/4.0/).
 
-## TODO
+## Feature TODO
 - [x] game board UI
 - [x] click origin, then destination
 - [x] all basic movement rules
@@ -23,3 +23,6 @@ A Chess game written in V. Please feel free to contribute. All chess moves
 - [ ] drag piece from origin to destination
 - [ ] test cases
 - [ ] chess clock
+
+## Code TODO
+- [ ] implement `post_run` key-value pair for O-O and O-O-O in `relative_coords_map`

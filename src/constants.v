@@ -547,6 +547,14 @@ const relative_coords_map := {
 			conditions: [destination_no_same_color]
 			break_conditions: [only_one]
 		},
+		RelativeCoords{
+			relative_coords: Coords{
+				y: 0
+				x: 2
+			}
+			conditions: [white_oo]
+			break_conditions: [only_one]
+		},
 	]
 	'black_pawn':   [
 		RelativeCoords{
