@@ -7,7 +7,7 @@ const white_oo_move = Move{Coords{7, 4}, Coords{7, 6}}
 const black_oo_move = Move{Coords{0, 4}, Coords{0, 6}}
 
 
-const relative_coords_map := {
+const move_rules_map := {
 	'black_rook':   [
 		RelativeCoords{
 			relative_coords: Coords{

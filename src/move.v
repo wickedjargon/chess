@@ -10,7 +10,6 @@ struct RelativeCoords {
 	modifiers        []string
 }
 
-
 struct Coords { y int x int }
 
 struct Move { origin_coords Coords destination_coords Coords }
@@ -26,7 +25,7 @@ fn (a Coords) + (b Coords) Coords {
 fn get_legal_moves(game_board GameBoard, origin_coords Coords) []Coords {
 	origin_piece := game_board.table.at(origin_coords)
 	mut legal_moves := []Coords{}
-	for relative_coords in relative_coords_map[origin_piece.map_key] {
+	for relative_coords in move_rules_map[origin_piece.map_key] {
 		mut absolute_destination_coords := origin_coords + relative_coords.relative_coords
 		for ; within_board(absolute_destination_coords) && all_conditions_met(game_board, origin_coords, absolute_destination_coords, relative_coords.conditions);
 		absolute_destination_coords += relative_coords.relative_coords {
@@ -63,28 +62,18 @@ fn handle_origin_coords(mut app App, origin_coords Coords) {
 	app.selection_state = .destination_coords
 }
 
+fn handle_destination_coords(mut app App, move Move) {
+	move_piece(mut app.game_board.table, move)
+	app.game_board.to_play = opposite_color(app.game_board.to_play)
+	app.selection_state = .origin_coords
+	// set_post_move_sets(move_rules_map[origin_piece.map_key].post_move_sets)
+}
+
 fn handle_coords(mut app App, coords Coords) {
 	if app.selection_state == .origin_coords && app.game_board.table.at(coords).color == app.game_board.to_play {
 		handle_origin_coords(mut app, coords)
 	} else if app.selection_state == .destination_coords && coords in app.legal_moves {
-		move := Move {app.origin_coords, coords}
-		piece := app.game_board.table.at(move.origin_coords)
-		move_piece(mut app.game_board.table, move)
-		if app.game_board.table.at(move.origin_coords).shape == .king {
-			app.game_board.oo[piece.map_key] = false
-			app.game_board.ooo[piece.map_key] = false
-		}
-		if move == white_oo_move {
-			app.game_board.oo[piece.map_key] = false
-			app.game_board.ooo[piece.map_key] = false
-			move_piece(mut app.game_board.table, Move{Coords{7, 7}, Coords{7, 5}}) // white
-		} else if move == black_oo_move {
-			app.game_board.oo[piece.map_key] = false
-			app.game_board.ooo[piece.map_key] = false
-			move_piece(mut app.game_board.table, Move{Coords{0, 7}, Coords{0, 5}}) //black
-		}
-		app.game_board.to_play = opposite_color(app.game_board.to_play)
-		app.selection_state = .origin_coords
+		handle_destination_coords(mut app, Move {app.origin_coords, coords})
 		// player selects another one of his pieces:
 	} else if app.selection_state == .destination_coords && app.game_board.table.at(coords).color == app.game_board.to_play {
 		handle_origin_coords(mut app, coords)
