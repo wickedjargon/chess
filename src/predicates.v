@@ -55,6 +55,13 @@ fn destination_no_same_color(game_board GameBoard, origin_coords Coords, destina
 	return game_board.table.at(destination_coords).color != game_board.table.at(origin_coords).color
 }
 
+
+fn black_oo (game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
+	return game_board.oo['black'] == true &&
+		game_board.table.at(Coords{0, 5}).shape == .empty_square &&
+		game_board.table.at(Coords{0, 6}).shape == .empty_square
+}
+
 // post loop conditions:
 
 fn only_one(game_board GameBoard, origin_coords Coords, destination_coords Coords, legal_moves []Coords) bool {
@@ -72,3 +79,4 @@ fn last_legal_was_capture(game_board GameBoard, origin_coords Coords, destinatio
 	}
 	return false
 }
+

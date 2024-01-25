@@ -35,10 +35,8 @@ struct GameBoard {
 	mut:
 	table [][]Piece
 	to_play Color
-	white_oo bool // short castling
-	black_oo bool
-	white_ooo bool // long castling
-	black_ooo bool
+	oo       map[string]bool
+	ooo      map[string]bool
 	en_passant EnPassant // a pawn's coords that can be captured next turn via en passant rule
 }
 

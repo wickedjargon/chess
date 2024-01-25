@@ -53,10 +53,10 @@ fn new_game(mut app App) {
 	app.game_board.table = empty_game_board.clone()
 	app.legal_moves_game_board = empty_legal_moves_game_board.clone()
 	app.game_board.to_play = .white
-	app.game_board.white_oo = false
-	app.game_board.black_oo = false
-	app.game_board.white_ooo = false
-	app.game_board.black_ooo = false
+	app.game_board.oo['white'] = true
+	app.game_board.oo['black'] = true
+	app.game_board.ooo['white'] = true
+	app.game_board.ooo['black'] = true
 	app.game_board.en_passant = EnPassant(false)
 
 	set_pieces(mut app.game_board.table)
