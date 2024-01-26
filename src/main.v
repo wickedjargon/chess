@@ -59,8 +59,6 @@ fn main() {
 		user_data: app
 		window_title: 'Chess'
 		init_fn: app.init_images_wrapper
-		// width: 1000
-		// height: 1000
 		click_fn: click
 		frame_fn: frame
 		event_fn: on_event

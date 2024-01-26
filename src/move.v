@@ -31,9 +31,7 @@ fn get_legal_moves(game_board GameBoard, origin_coords Coords) []Coords {
 		absolute_destination_coords += relative_coords.relative_coords {
 			legal_moves << absolute_destination_coords
 			if any_condition_met(game_board, origin_coords, absolute_destination_coords, legal_moves, relative_coords.break_conditions)
-			{
-				break
-			}
+			{ break }
 		}
 	}
 	return legal_moves
@@ -88,12 +86,9 @@ fn move_sets(mut game_board GameBoard, move Move) {
 		move_piece(mut game_board.table, Move{Coords{0, 7}, Coords{0, 5}})
 	} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, -1) {
 			game_board.en_passant = move.destination_coords
-			dump(game_board.en_passant)
 		} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, 1) {
 			game_board.en_passant = move.destination_coords
-			dump(game_board.en_passant)
 	}
-	dump(game_board.en_passant == EnPassant(Coords{3, 0}))
 }
 
 fn handle_destination_coords(mut app App, move Move) {
