@@ -78,6 +78,20 @@ fn white_oo (game_board GameBoard, origin_coords Coords, destination_coords Coor
 		game_board.table.at(Coords{7, 6}).shape == .empty_square
 }
 
+fn black_ooo (game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
+	return game_board.ooo['black'] == true &&
+		game_board.table.at(Coords{0, 1}).shape == .empty_square &&
+		game_board.table.at(Coords{0, 2}).shape == .empty_square &&
+		game_board.table.at(Coords{0, 3}).shape == .empty_square
+}
+
+fn white_ooo (game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
+	return game_board.ooo['white'] == true &&
+		game_board.table.at(Coords{7, 1}).shape == .empty_square &&
+		game_board.table.at(Coords{7, 2}).shape == .empty_square &&
+		game_board.table.at(Coords{7, 3}).shape == .empty_square
+}
+
 // post loop conditions:
 
 fn only_one(game_board GameBoard, origin_coords Coords, destination_coords Coords, legal_moves []Coords) bool {

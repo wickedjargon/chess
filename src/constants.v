@@ -1,12 +1,5 @@
 module main
 
-const game_board_dimension = 8
-const empty_game_board = [][]Piece{len: game_board_dimension, cap: game_board_dimension, init: []Piece{len: game_board_dimension, cap: game_board_dimension, init: Piece{shape: .empty_square map_key: 'empty_square'}}}
-const empty_legal_moves_game_board = [][]bool{len: game_board_dimension, cap: game_board_dimension, init: []bool{len: game_board_dimension, cap: game_board_dimension, init: false}}
-const white_oo_move = Move{Coords{7, 4}, Coords{7, 6}}
-const black_oo_move = Move{Coords{0, 4}, Coords{0, 6}}
-
-
 const move_rules_map := {
 	'black_rook':   [
 		RelativeCoords{
@@ -481,6 +474,14 @@ const move_rules_map := {
 			conditions: [black_oo]
 			break_conditions: [only_one]
 		},
+		RelativeCoords{
+			relative_coords: Coords{
+				y: 0
+				x: -2
+			}
+			conditions: [black_ooo]
+			break_conditions: [only_one]
+		},
 	]
 	'white_king':   [
 		RelativeCoords{
@@ -555,6 +556,14 @@ const move_rules_map := {
 			conditions: [white_oo]
 			break_conditions: [only_one]
 		},
+		RelativeCoords{
+			relative_coords: Coords{
+				y: 0
+				x: -2
+			}
+			conditions: [white_ooo]
+			break_conditions: [only_one]
+		},
 	]
 	'black_pawn':   [
 		RelativeCoords{
@@ -562,8 +571,7 @@ const move_rules_map := {
 				y: 2
 				x: 0
 			}
-			conditions: [destination_no_same_color, origin_index_1_row,
-				destination_no_capture]
+			conditions: [destination_no_same_color, origin_index_1_row]
 			break_conditions: [only_one]
 		},
 		RelativeCoords{
@@ -579,7 +587,15 @@ const move_rules_map := {
 				y: 1
 				x: 1
 			}
-			conditions: [destination_no_same_color, destination_capture]
+			conditions: [destination_capture]
+			break_conditions: [only_one]
+		},
+		RelativeCoords{
+			relative_coords: Coords{
+				y: 1
+				x: -1
+			}
+			conditions: [destination_capture]
 			break_conditions: [only_one]
 		},
 		RelativeCoords{
@@ -605,8 +621,7 @@ const move_rules_map := {
 				y: -2
 				x: 0
 			}
-			conditions: [destination_no_same_color, origin_index_6_row,
-				destination_no_capture]
+			conditions: [destination_no_same_color, origin_index_6_row]
 			break_conditions: [only_one]
 		},
 		RelativeCoords{
@@ -622,7 +637,7 @@ const move_rules_map := {
 				y: -1
 				x: -1
 			}
-			conditions: [destination_no_same_color, destination_capture]
+			conditions: [destination_capture]
 			break_conditions: [only_one]
 		},
 		RelativeCoords{
@@ -630,7 +645,7 @@ const move_rules_map := {
 				y: -1
 				x: 1
 			}
-			conditions: [destination_no_same_color, destination_capture]
+			conditions: [destination_capture]
 			break_conditions: [only_one]
 		},
 		RelativeCoords{
@@ -651,3 +666,4 @@ const move_rules_map := {
 		},
 	]
 }
+

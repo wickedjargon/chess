@@ -1,12 +1,19 @@
 module main
 
+const white_oo_move = Move{Coords{7, 4}, Coords{7, 6}}
+const black_oo_move = Move{Coords{0, 4}, Coords{0, 6}}
+
 struct RelativeCoords {
-	mut:
 	relative_coords  Coords
 	conditions       []fn (GameBoard, Coords, Coords) bool
 	break_conditions []fn (GameBoard, Coords, Coords, []Coords) bool
-	modifiers        []string
 }
+
+struct GameBoardSetters {
+	conditions []fn (GameBoard, Coords, Coords) bool
+	setters []fn (GameBoard, Coords, Coords)
+}
+
 
 struct Coords { y int x int }
 
@@ -72,20 +79,23 @@ fn side_piece_is_opposite_color(game_board [][]Piece, move Move, offset int) boo
 }
 
 fn move_sets(mut game_board GameBoard, move Move) {
-	dump(side_piece_is_opposite_color(game_board.table, move, -1))
-
 	piece := game_board.table.at(move.origin_coords)
 	if piece.shape == .king {
 		game_board.oo[piece.color.str()] = false
 		game_board.ooo[piece.color.str()] = false
-	} if move == Move{Coords{7, 4}, Coords{7, 6}} { // black king sides castling move
+	} if piece.shape == .king &&  move == Move{Coords{7, 4}, Coords{7, 6}} { // black king sides castling move
 		move_piece(mut game_board.table, Move{Coords{7, 7}, Coords{7, 5}})
-	} else if move == Move{Coords{0, 4}, Coords{0, 6}} {
+	} else if piece.shape == .king && move == Move{Coords{0, 4}, Coords{0, 6}} {
 		move_piece(mut game_board.table, Move{Coords{0, 7}, Coords{0, 5}})
-	} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, -1) { // en passant
-			game_board.en_passant = move.destination_coords
-		} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, 1) { // en passant
-			game_board.en_passant = move.destination_coords
+	} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, -1) { // set en passant coords
+		game_board.en_passant = move.destination_coords
+	} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, 1) { //  set en passant coords
+		game_board.en_passant = move.destination_coords
+	} else if piece.shape == .pawn && EnPassant(move.destination_coords + if piece.color == .white { Coords{ 1, 0} } else { Coords{ -1, 0} }) == game_board.en_passant    { // made the en passant move
+		capture_coords := move.destination_coords + if piece.color == .white { Coords{ 1, 0} } else { Coords{ -1, 0} }
+		game_board.table[capture_coords.y][capture_coords.x] = Piece { shape: .empty_square map_key: 'empty_square' }
+	} else if game_board.en_passant != EnPassant(false) {
+		game_board.en_passant = EnPassant(false)
 	}
 }
 
