@@ -38,6 +38,7 @@ struct GameBoard {
 	oo       map[string]bool
 	ooo      map[string]bool
 	en_passant EnPassant // a pawn's coords that can be captured next turn via en passant rule
+	king_coords            map[string]Coords
 }
 
 struct App {

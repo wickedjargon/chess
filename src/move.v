@@ -1,7 +1,5 @@
 module main
 
-import gg
-
 struct RelativeCoords {
 	mut:
 	relative_coords  Coords
@@ -69,13 +67,13 @@ fn pawn_moved_two_spaces(game_board [][]Piece, move Move) bool {
 fn side_piece_is_opposite_color(game_board [][]Piece, move Move, offset int) bool {
 	if within_board(Coords{move.destination_coords.y, move.destination_coords.x + offset}) {
 		return game_board[move.destination_coords.y][move.destination_coords.x + offset].color == opposite_color(game_board.at(move.origin_coords).color)
-	} else {
-		return false
 	}
+	return false
 }
 
 fn move_sets(mut game_board GameBoard, move Move) {
-	game_board.en_passant = false
+	dump(side_piece_is_opposite_color(game_board.table, move, -1))
+
 	piece := game_board.table.at(move.origin_coords)
 	if piece.shape == .king {
 		game_board.oo[piece.color.str()] = false
@@ -84,9 +82,9 @@ fn move_sets(mut game_board GameBoard, move Move) {
 		move_piece(mut game_board.table, Move{Coords{7, 7}, Coords{7, 5}})
 	} else if move == Move{Coords{0, 4}, Coords{0, 6}} {
 		move_piece(mut game_board.table, Move{Coords{0, 7}, Coords{0, 5}})
-	} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, -1) {
+	} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, -1) { // en passant
 			game_board.en_passant = move.destination_coords
-		} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, 1) {
+		} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, 1) { // en passant
 			game_board.en_passant = move.destination_coords
 	}
 }

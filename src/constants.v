@@ -587,7 +587,15 @@ const move_rules_map := {
 				y: 1
 				x: -1
 			}
-			conditions: [destination_no_same_color, destination_capture]
+			conditions: [en_passant_black]
+			break_conditions: [only_one]
+		},
+		RelativeCoords{
+			relative_coords: Coords{
+				y: 1
+				x: 1
+			}
+			conditions: [en_passant_black]
 			break_conditions: [only_one]
 		},
 	]
@@ -623,6 +631,22 @@ const move_rules_map := {
 				x: 1
 			}
 			conditions: [destination_no_same_color, destination_capture]
+			break_conditions: [only_one]
+		},
+		RelativeCoords{
+			relative_coords: Coords{
+				y: -1
+				x: -1
+			}
+			conditions: [en_passant_white] // en passant
+			break_conditions: [only_one]
+		},
+		RelativeCoords{
+			relative_coords: Coords{
+				y: -1
+				x: 1
+			}
+			conditions: [en_passant_white] // en passant
 			break_conditions: [only_one]
 		},
 	]

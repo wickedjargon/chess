@@ -34,6 +34,15 @@ fn any_condition_met(game_board GameBoard, origin_coords Coords, destination_coo
 
 // pre loop condition:
 
+
+fn en_passant_white(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
+	return EnPassant(destination_coords + Coords{1, 0}) == game_board.en_passant
+}
+
+fn en_passant_black(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
+	return EnPassant(destination_coords + Coords{-1, 0}) == game_board.en_passant
+}
+
 fn origin_index_6_row(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
 	return origin_coords.y == 6
 }
@@ -86,4 +95,3 @@ fn last_legal_was_capture(game_board GameBoard, origin_coords Coords, destinatio
 	}
 	return false
 }
-

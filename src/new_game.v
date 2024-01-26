@@ -58,6 +58,8 @@ fn new_game(mut app App) {
 	app.game_board.ooo['white'] = true
 	app.game_board.ooo['black'] = true
 	app.game_board.en_passant = EnPassant(false)
+	app.game_board.king_coords['black'] = Coords{0, 4}
+	app.game_board.king_coords['white'] = Coords{7, 4}
 
 	set_pieces(mut app.game_board.table)
 }
