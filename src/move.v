@@ -83,10 +83,10 @@ fn move_sets(mut game_board GameBoard, move Move) {
 	if piece.shape == .king {
 		game_board.oo[piece.color.str()] = false
 		game_board.ooo[piece.color.str()] = false
-	} if piece.shape == .king && piece.color == .black && move == Move{Coords{7, 4}, Coords{7, 6}} { // black king sides castling move
-		move_piece(mut game_board.table, Move{Coords{7, 7}, Coords{7, 5}})
-	} else if piece.shape == .king && piece.color == .white && move == Move{Coords{0, 4}, Coords{0, 6}} { // white king side castling
+	} if piece.shape == .king && piece.color == .black && move == Move{Coords{0, 4}, Coords{0, 6}} { // black king sides castling move
 		move_piece(mut game_board.table, Move{Coords{0, 7}, Coords{0, 5}})
+	} else if piece.shape == .king && piece.color == .white && move == Move{Coords{7, 4}, Coords{7, 6}} { // white king side castling
+		move_piece(mut game_board.table, Move{Coords{7, 7}, Coords{7, 5}})
 	} else if piece.shape == .king && piece.color == .black && move == Move{Coords{0, 4}, Coords{0, 2}} { // black queen side castling move
 		move_piece(mut game_board.table, Move{Coords{0, 0}, Coords{0, 3}})
 	} else if piece.shape == .king && piece.color  == .white && move == Move{Coords{7, 4}, Coords{7, 2}} { // white queen side castling move
