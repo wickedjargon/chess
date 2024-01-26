@@ -9,11 +9,12 @@ struct RelativeCoords {
 	break_conditions []fn (GameBoard, Coords, Coords, []Coords) bool
 }
 
-struct GameBoardSetters {
-	conditions []fn (GameBoard, Coords, Coords) bool
-	setters []fn (GameBoard, Coords, Coords)
+struct KingSelfCheck {
+	relative_coords []Coords
+	shapes []Shape
+	conditions []fn (GameBoard, Coords) bool
+	break_conditions []fn (GameBoard, Coords) bool
 }
-
 
 struct Coords { y int x int }
 
@@ -41,6 +42,7 @@ fn get_legal_moves(game_board GameBoard, origin_coords Coords) []Coords {
 	}
 	return legal_moves
 }
+
 
 fn set_legal_moves_game_board(mut legal_moves_game_board [][]bool, legal_moves []Coords) {
 	for y, mut row in legal_moves_game_board {

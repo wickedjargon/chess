@@ -1,6 +1,6 @@
 module main
 
-const move_rules_map := {
+const move_rules_map = {
 	'black_rook':   [
 		RelativeCoords{
 			relative_coords: Coords{
@@ -666,4 +666,47 @@ const move_rules_map := {
 		},
 	]
 }
+
+// const king_self_check =
+// 	  [
+// 		  KingSelfCheck {
+// 			  relative_coords: [Coords{1, 0}, Coords{-1, 0}, Coords{0, 1}, Coords{0, -1}]
+// 			  shapes: [.rook, .queen]
+// 			  conditions: [destination_no_same_color]
+// 			  break_conditions: [destination_capture]
+// 		  },
+// 		  KingSelfCheck {
+// 			  relative_coords: [Coords{1, 1}, Coords{-1, -1}, Coords{1, -1}, Coords{-1, 1}]
+// 			  shapes: [.bishop, .queen]
+// 			  conditions: [destination_no_same_color]
+// 			  break_conditions: [destination_capture]
+// 		  },
+// 		  KingSelfCheck {
+// 			  relative_coords: [Coords{-1, -1}, Coords{-1, 1}]
+// 			  shapes: [.pawn]
+// 			  conditions: [white_king_only, destination_no_same_color]
+// 			  break_conditions: [only_one]
+// 		  },
+// 		  KingSelfCheck {
+// 			  relative_coords: [Coords{1, -1}, Coords{1, 1}]
+// 			  shapes: [.pawn]
+// 			  conditions: [black_king_only, destination_no_same_color]
+// 			  break_conditions: [only_one]
+// 		  },
+// 		  KingSelfCheck {
+// 			  relative_coords: [
+// 				  Coords{2, -1},
+// 				  Coords{2, 1},
+// 				  Coords{-2, -1},
+// 				  Coords{-2, 1},
+// 				  Coords{-1, 2},
+// 				  Coords{1, 2},
+// 				  Coords{-1, -2}
+// 				  Coords{1, -2}
+// 			  ]
+// 			  shapes: [.knight]
+// 			  conditions: [destination_no_same_color]
+// 			  break_conditions: [only_one]
+// 		  },
+// 	  ]
 
