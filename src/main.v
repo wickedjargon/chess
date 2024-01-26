@@ -46,8 +46,8 @@ struct App {
 	gg                     &gg.Context = unsafe { nil }
 	image_database         map[string]gg.Image
 	game_board             GameBoard
+	self_check_game_board  GameBoard
 	legal_moves            []Coords
-	self_check_game_board  [][]Piece
 	legal_moves_game_board [][]bool
 	selection_state        SelectionState
 	origin_coords          Coords

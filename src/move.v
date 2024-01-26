@@ -53,9 +53,10 @@ fn set_legal_moves_game_board(mut legal_moves_game_board [][]bool, legal_moves [
 	}
 }
 
-fn move_piece(mut game_board_table [][]Piece, move Move) {
-	game_board_table[move.destination_coords.y][move.destination_coords.x] = game_board_table.at(move.origin_coords)
-	game_board_table[move.origin_coords.y][move.origin_coords.x] = Piece {  }
+fn move_piece(mut game_board GameBoard, move Move) {
+	move_sets(mut game_board, move)
+	game_board.table[move.destination_coords.y][move.destination_coords.x] = game_board.table.at(move.origin_coords)
+	game_board.table[move.origin_coords.y][move.origin_coords.x] = Piece {  }
 }
 
 fn handle_origin_coords(mut app App, origin_coords Coords) {
@@ -84,28 +85,27 @@ fn move_sets(mut game_board GameBoard, move Move) {
 		game_board.oo[piece.color.str()] = false
 		game_board.ooo[piece.color.str()] = false
 	} if piece.shape == .king && piece.color == .black && move == Move{Coords{0, 4}, Coords{0, 6}} { // black king sides castling move
-		move_piece(mut game_board.table, Move{Coords{0, 7}, Coords{0, 5}})
+		move_piece(mut game_board, Move{Coords{0, 7}, Coords{0, 5}})
 	} else if piece.shape == .king && piece.color == .white && move == Move{Coords{7, 4}, Coords{7, 6}} { // white king side castling
-		move_piece(mut game_board.table, Move{Coords{7, 7}, Coords{7, 5}})
+		move_piece(mut game_board, Move{Coords{7, 7}, Coords{7, 5}})
 	} else if piece.shape == .king && piece.color == .black && move == Move{Coords{0, 4}, Coords{0, 2}} { // black queen side castling move
-		move_piece(mut game_board.table, Move{Coords{0, 0}, Coords{0, 3}})
+		move_piece(mut game_board, Move{Coords{0, 0}, Coords{0, 3}})
 	} else if piece.shape == .king && piece.color  == .white && move == Move{Coords{7, 4}, Coords{7, 2}} { // white queen side castling move
-		move_piece(mut game_board.table, Move{Coords{7, 0}, Coords{7, 3}})
+		move_piece(mut game_board, Move{Coords{7, 0}, Coords{7, 3}})
 	} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, -1) { // set en passant coords for next move
 		game_board.en_passant = move.destination_coords
 	} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, 1) { //  set en passant coords for next move
 		game_board.en_passant = move.destination_coords
 	} else if piece.shape == .pawn && EnPassant(move.destination_coords + if piece.color == .white { Coords{ 1, 0} } else { Coords{ -1, 0} }) == game_board.en_passant { // made the en passant move
 		capture_coords := move.destination_coords + if piece.color == .white { Coords{ 1, 0} } else { Coords{ -1, 0} }
-		game_board.table[capture_coords.y][capture_coords.x] = Piece { shape: .empty_square map_key: 'empty_square' }
+		game_board.table[capture_coords.y][capture_coords.x] = Piece { }
 	} else if game_board.en_passant != EnPassant(false) {
 		game_board.en_passant = EnPassant(false)
 	}
 }
 
 fn handle_destination_coords(mut app App, move Move) {
-	move_sets(mut app.game_board, move)
-	move_piece(mut app.game_board.table, move)
+	move_piece(mut app.game_board, move)
 	app.game_board.to_play = opposite_color(app.game_board.to_play)
 	app.selection_state = .origin_coords
 }
