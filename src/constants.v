@@ -678,7 +678,16 @@ const attacks =
 			  shapes: [.bishop, .queen]
 		  },
 		  Attack {
-			  relative_coords_list: [Coords{1, 0}, Coords{-1, 0}, Coords{0, 1}, Coords{0, -1}, Coords{1, 1}, Coords{-1, -1}, Coords{1, -1}, Coords{-1, 1}]
+			  relative_coords_list: [
+				  Coords{1, 0},
+				  Coords{-1, 0},
+				  Coords{0, 1},
+				  Coords{0, -1},
+				  Coords{1, 1},
+				  Coords{-1, -1},
+				  Coords{1, -1},
+				  Coords{-1, 1}
+			  ]
 			  shapes: [.king]
 		  },
 		  Attack {

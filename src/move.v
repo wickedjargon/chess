@@ -55,6 +55,29 @@ fn king_not_attacked(game_board GameBoard, origin_coords Coords, destination_coo
 	return true
 }
 
+fn square_attacked(game_board GameBoard, )
+
+
+// fn set_check(mut game_board GameBoard) {
+// 	current_player := game_board.to_play // is this player in check?
+// 	opposite_player := opposite_color(game_board.to_play)
+// 	for attack in attacks {
+// 		for relative_coords in attack.relative_coords_list {
+// 			mut absolute_coords := game_board.king_coords[current_player]
+// 			for within_board(absolute_coords) {
+// 				absolute_coords += relative_coords
+// 				if within_board(absolute_coords) && game_board_tmp.table.at(absolute_coords).color == current_player { break }
+// 				if within_board(absolute_coords) && game_board_tmp.table.at(absolute_coords).color == opposite_player && game_board_tmp.table.at(absolute_coords).shape in attack.shapes {
+// 					game_board.is_checked[current_player.color.str()] = true
+// 					return
+// 				}
+// 				if Shape.pawn in attack.shapes || Shape.knight in attack.shapes || Shape.king in attack.shapes { break }
+// 			}
+// 		}
+// 	}
+// }
+
+
 fn get_legal_moves(game_board GameBoard, origin_coords Coords) []Coords {
 	origin_piece := game_board.table.at(origin_coords)
 	mut legal_moves := []Coords{}
@@ -97,6 +120,11 @@ fn move_piece(mut game_board GameBoard, move Move) {
 	game_board.to_play = opposite_color(game_board.to_play)
 }
 
+fn move_piece_no_player_switch(mut game_board GameBoard, move Move) {
+	game_board.table[move.destination_coords.y][move.destination_coords.x] = game_board.table.at(move.origin_coords)
+	game_board.table[move.origin_coords.y][move.origin_coords.x] = Piece {  }
+}
+
 fn handle_origin_coords(mut app App, origin_coords Coords) {
 	app.legal_moves = get_legal_moves(app.game_board, origin_coords)
 	set_legal_moves_game_board(mut app.legal_moves_game_board, app.legal_moves)
@@ -124,13 +152,17 @@ fn move_sets(mut game_board GameBoard, move Move) {
 		game_board.oo[piece.color.str()] = false
 		game_board.ooo[piece.color.str()] = false
 	} if piece.shape == .king && piece.color == .black && move == Move{Coords{0, 4}, Coords{0, 6}} { // black king sides castling move
-		move_piece(mut game_board, Move{Coords{0, 7}, Coords{0, 5}})
+		move_piece_no_player_switch(mut game_board, Move{Coords{0, 7}, Coords{0, 5}})
 	} else if piece.shape == .king && piece.color == .white && move == Move{Coords{7, 4}, Coords{7, 6}} { // white king side castling
-		move_piece(mut game_board, Move{Coords{7, 7}, Coords{7, 5}})
+		move_piece_no_player_switch(mut game_board, Move{Coords{7, 7}, Coords{7, 5}})
 	} else if piece.shape == .king && piece.color == .black && move == Move{Coords{0, 4}, Coords{0, 2}} { // black queen side castling move
-		move_piece(mut game_board, Move{Coords{0, 0}, Coords{0, 3}})
+		move_piece_no_player_switch(mut game_board, Move{Coords{0, 0}, Coords{0, 3}})
 	} else if piece.shape == .king && piece.color  == .white && move == Move{Coords{7, 4}, Coords{7, 2}} { // white queen side castling move
-		move_piece(mut game_board, Move{Coords{7, 0}, Coords{7, 3}})
+		move_piece_no_player_switch(mut game_board, Move{Coords{7, 0}, Coords{7, 3}})
+	} else if piece.shape == .rook && (move.origin_coords == Coords{0, 0} || move.origin_coords == Coords{7, 0}) {
+		game_board.ooo[piece.color.str()] = false
+	} else if piece.shape == .rook && (move.origin_coords == Coords{0, 7} || move.origin_coords == Coords{7, 7}) {
+		game_board.oo[piece.color.str()] = false
 	} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, -1) { // set en passant coords for next move
 		game_board.en_passant = move.destination_coords
 	} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, 1) { //  set en passant coords for next move
@@ -146,6 +178,7 @@ fn move_sets(mut game_board GameBoard, move Move) {
 fn handle_destination_coords(mut app App, move Move) {
 	move_piece(mut app.game_board, move)
 	app.selection_state = .origin_coords
+	// set_check(mut app.game_board)
 }
 
 fn handle_coords(mut app App, coords Coords) {
