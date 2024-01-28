@@ -28,7 +28,7 @@ fn (a Coords) + (b Coords) Coords {
 
 fn king_not_attacked(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
 	move := Move{origin_coords, destination_coords}
-	mut copy_game_board := GameBoard {
+	mut game_board_tmp := GameBoard {
 		table:       game_board.table.clone()
 		to_play:     game_board.to_play
 		oo:          game_board.oo.clone()
@@ -36,15 +36,16 @@ fn king_not_attacked(game_board GameBoard, origin_coords Coords, destination_coo
 		en_passant:  game_board.en_passant
 		king_coords: game_board.king_coords
 	}
-	color := opposite_color(copy_game_board.to_play)
-	move_piece(mut copy_game_board, move)
+	move_piece(mut game_board_tmp, move)
+	opposite_player := game_board_tmp.to_play
+	current_player := opposite_color(game_board_tmp.to_play)
 	for attack in attacks {
 		for relative_coords in attack.relative_coords_list {
-			mut absolute_coords := copy_game_board.king_coords[copy_game_board.to_play.str()]
+			mut absolute_coords := game_board_tmp.king_coords[current_player.str()]
 			for within_board(absolute_coords) {
 				absolute_coords += relative_coords
-				if within_board(absolute_coords) && copy_game_board.table.at(absolute_coords).color == opposite_color(color) { break }
-				if within_board(absolute_coords) && copy_game_board.table.at(absolute_coords).color == color && copy_game_board.table.at(absolute_coords).shape in attack.shapes {
+				if within_board(absolute_coords) && game_board_tmp.table.at(absolute_coords).color == current_player { break }
+				if within_board(absolute_coords) && game_board_tmp.table.at(absolute_coords).color == opposite_player && game_board_tmp.table.at(absolute_coords).shape in attack.shapes {
 					return false
 				}
 				if Shape.pawn in attack.shapes || Shape.knight in attack.shapes || Shape.king in attack.shapes { break }
@@ -93,6 +94,7 @@ fn move_piece(mut game_board GameBoard, move Move) {
 	move_sets(mut game_board, move)
 	game_board.table[move.destination_coords.y][move.destination_coords.x] = game_board.table.at(move.origin_coords)
 	game_board.table[move.origin_coords.y][move.origin_coords.x] = Piece {  }
+	game_board.to_play = opposite_color(game_board.to_play)
 }
 
 fn handle_origin_coords(mut app App, origin_coords Coords) {
@@ -143,7 +145,6 @@ fn move_sets(mut game_board GameBoard, move Move) {
 
 fn handle_destination_coords(mut app App, move Move) {
 	move_piece(mut app.game_board, move)
-	app.game_board.to_play = opposite_color(app.game_board.to_play)
 	app.selection_state = .origin_coords
 }
 

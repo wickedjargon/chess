@@ -1,3 +1,5 @@
+module main
+
 fn opposite_color(color Color) Color {
 	if color == .black {
 		return Color.white
