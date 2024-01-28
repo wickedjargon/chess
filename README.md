@@ -14,7 +14,7 @@ A Chess game written in V. Please feel free to contribute. All chess moves
 - [x] click origin, then destination
 - [x] all basic movement rules
 - [x] self-checking rule
-- [x] O-O, O-O-O
+- [x] O-O, O-O-O (castling)
 - [x] en passant
 - [ ] FEN
 - [ ] PGN
@@ -24,6 +24,3 @@ A Chess game written in V. Please feel free to contribute. All chess moves
 - [ ] test cases
 - [ ] chess clock
 - [ ] 50-move-after-last-capture rule
-
-## Code TODO
-- [ ] implement `post_run` key-value pair for O-O and O-O-O in `relative_coords_map`
