@@ -9,11 +9,9 @@ struct RelativeCoords {
 	break_conditions []fn (GameBoard, Coords, Coords, []Coords) bool
 }
 
-struct KingSelfCheck {
-	relative_coords []Coords
+struct Attack {
+	relative_coords_list []Coords
 	shapes []Shape
-	conditions []fn (GameBoard, Coords) bool
-	break_conditions []fn (GameBoard, Coords) bool
 }
 
 struct Coords { y int x int }
@@ -28,13 +26,49 @@ fn (a Coords) + (b Coords) Coords {
 	return Coords {a.y + b.y, a.x + b.x}
 }
 
+fn king_not_attacked(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
+	move := Move{origin_coords, destination_coords}
+	mut copy_game_board := GameBoard {
+		table:       game_board.table.clone()
+		to_play:     game_board.to_play
+		oo:          game_board.oo.clone()
+		ooo:         game_board.ooo.clone()
+		en_passant:  game_board.en_passant
+		king_coords: game_board.king_coords
+	}
+	color := opposite_color(copy_game_board.to_play)
+	move_piece(mut copy_game_board, move)
+	for attack in attacks {
+		for relative_coords in attack.relative_coords_list {
+			mut absolute_coords := copy_game_board.king_coords[copy_game_board.to_play.str()]
+			for within_board(absolute_coords) {
+				absolute_coords += relative_coords
+				if within_board(absolute_coords) && copy_game_board.table.at(absolute_coords).color == opposite_color(color) { break }
+				if within_board(absolute_coords) && copy_game_board.table.at(absolute_coords).color == color && copy_game_board.table.at(absolute_coords).shape in attack.shapes {
+					return false
+				}
+				if Shape.pawn in attack.shapes || Shape.knight in attack.shapes || Shape.king in attack.shapes { break }
+			}
+		}
+	}
+	return true
+}
+
 fn get_legal_moves(game_board GameBoard, origin_coords Coords) []Coords {
 	origin_piece := game_board.table.at(origin_coords)
 	mut legal_moves := []Coords{}
 	for relative_coords in move_rules_map[origin_piece.map_key] {
 		mut absolute_destination_coords := origin_coords + relative_coords.relative_coords
-		for ; within_board(absolute_destination_coords) && all_conditions_met(game_board, origin_coords, absolute_destination_coords, relative_coords.conditions);
-		absolute_destination_coords += relative_coords.relative_coords {
+		for ;
+		within_board(absolute_destination_coords)
+			&& all_conditions_met(game_board,
+								  origin_coords,
+								  absolute_destination_coords,
+								  relative_coords.conditions)
+			&& king_not_attacked(game_board, origin_coords, absolute_destination_coords)
+		;
+		absolute_destination_coords += relative_coords.relative_coords
+		{
 			legal_moves << absolute_destination_coords
 			if any_condition_met(game_board, origin_coords, absolute_destination_coords, legal_moves, relative_coords.break_conditions)
 			{ break }
@@ -84,6 +118,7 @@ fn side_piece_is_opposite_color(game_board [][]Piece, move Move, offset int) boo
 fn move_sets(mut game_board GameBoard, move Move) {
 	piece := game_board.table.at(move.origin_coords)
 	if piece.shape == .king {
+		game_board.king_coords[piece.color.str()] = move.destination_coords
 		game_board.oo[piece.color.str()] = false
 		game_board.ooo[piece.color.str()] = false
 	} if piece.shape == .king && piece.color == .black && move == Move{Coords{0, 4}, Coords{0, 6}} { // black king sides castling move

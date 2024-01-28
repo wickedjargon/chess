@@ -13,9 +13,9 @@ A Chess game written in V. Please feel free to contribute. All chess moves
 - [x] game board UI
 - [x] click origin, then destination
 - [x] all basic movement rules
-- [ ] O-O, O-O-O
-- [ ] en passant
-- [ ] self-checking rule
+- [x] self-checking rule
+- [x] O-O, O-O-O
+- [x] en passant
 - [ ] FEN
 - [ ] PGN
 - [ ] who's turn is it UI with pixel font

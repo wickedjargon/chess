@@ -52,18 +52,21 @@ fn set_pieces(mut game_board [][]Piece) {
 	set_pieces_pawns(mut game_board, .white, 6)
 }
 
+fn set_game_board(mut game_board GameBoard) {
+	game_board.to_play = .white
+	game_board.table = empty_game_board.clone()
+	game_board.oo['white'] = true
+	game_board.oo['black'] = true
+	game_board.ooo['white'] = true
+	game_board.ooo['black'] = true
+	game_board.en_passant = EnPassant(false)
+	game_board.king_coords['black'] = Coords{0, 4}
+	game_board.king_coords['white'] = Coords{7, 4}
+}
+
 fn new_game(mut app App) {
 	app.selection_state = .origin_coords
-	app.game_board.table = empty_game_board.clone()
 	app.legal_moves_game_board = empty_legal_moves_game_board.clone()
-	app.game_board.to_play = .white
-	app.game_board.oo['white'] = true
-	app.game_board.oo['black'] = true
-	app.game_board.ooo['white'] = true
-	app.game_board.ooo['black'] = true
-	app.game_board.en_passant = EnPassant(false)
-	app.game_board.king_coords['black'] = Coords{0, 4}
-	app.game_board.king_coords['white'] = Coords{7, 4}
-
+	set_game_board(mut app.game_board)
 	set_pieces(mut app.game_board.table)
 }

@@ -571,7 +571,7 @@ const move_rules_map = {
 				y: 2
 				x: 0
 			}
-			conditions: [destination_no_same_color, origin_index_1_row]
+			conditions: [destination_no_same_color, origin_index_1_row, destination_no_capture]
 			break_conditions: [only_one]
 		},
 		RelativeCoords{
@@ -621,7 +621,7 @@ const move_rules_map = {
 				y: -2
 				x: 0
 			}
-			conditions: [destination_no_same_color, origin_index_6_row]
+			conditions: [destination_no_same_color, origin_index_6_row, destination_no_capture]
 			break_conditions: [only_one]
 		},
 		RelativeCoords{
@@ -667,46 +667,39 @@ const move_rules_map = {
 	]
 }
 
-// const king_self_check =
-// 	  [
-// 		  KingSelfCheck {
-// 			  relative_coords: [Coords{1, 0}, Coords{-1, 0}, Coords{0, 1}, Coords{0, -1}]
-// 			  shapes: [.rook, .queen]
-// 			  conditions: [destination_no_same_color]
-// 			  break_conditions: [destination_capture]
-// 		  },
-// 		  KingSelfCheck {
-// 			  relative_coords: [Coords{1, 1}, Coords{-1, -1}, Coords{1, -1}, Coords{-1, 1}]
-// 			  shapes: [.bishop, .queen]
-// 			  conditions: [destination_no_same_color]
-// 			  break_conditions: [destination_capture]
-// 		  },
-// 		  KingSelfCheck {
-// 			  relative_coords: [Coords{-1, -1}, Coords{-1, 1}]
-// 			  shapes: [.pawn]
-// 			  conditions: [white_king_only, destination_no_same_color]
-// 			  break_conditions: [only_one]
-// 		  },
-// 		  KingSelfCheck {
-// 			  relative_coords: [Coords{1, -1}, Coords{1, 1}]
-// 			  shapes: [.pawn]
-// 			  conditions: [black_king_only, destination_no_same_color]
-// 			  break_conditions: [only_one]
-// 		  },
-// 		  KingSelfCheck {
-// 			  relative_coords: [
-// 				  Coords{2, -1},
-// 				  Coords{2, 1},
-// 				  Coords{-2, -1},
-// 				  Coords{-2, 1},
-// 				  Coords{-1, 2},
-// 				  Coords{1, 2},
-// 				  Coords{-1, -2}
-// 				  Coords{1, -2}
-// 			  ]
-// 			  shapes: [.knight]
-// 			  conditions: [destination_no_same_color]
-// 			  break_conditions: [only_one]
-// 		  },
-// 	  ]
+const attacks =
+	  [
+		  Attack {
+			  relative_coords_list: [Coords{1, 0}, Coords{-1, 0}, Coords{0, 1}, Coords{0, -1}]
+			  shapes: [.rook, .queen]
+		  },
+		  Attack {
+			  relative_coords_list: [Coords{1, 1}, Coords{-1, -1}, Coords{1, -1}, Coords{-1, 1}]
+			  shapes: [.bishop, .queen]
+		  },
+		  Attack {
+			  relative_coords_list: [Coords{1, 1}, Coords{-1, -1}, Coords{1, -1}, Coords{-1, 1}]
+			  shapes: [.king]
+		  },
+		  Attack {
+			  relative_coords_list: [Coords{-1, -1}, Coords{-1, 1}]
+		  },
+		  Attack {
+			  relative_coords_list: [Coords{1, -1}, Coords{1, 1}]
+			  shapes: [.pawn]
+		  },
+		  Attack {
+			  relative_coords_list: [
+				  Coords{2, -1},
+				  Coords{2, 1},
+				  Coords{-2, -1},
+				  Coords{-2, 1},
+				  Coords{-1, 2},
+				  Coords{1, 2},
+				  Coords{-1, -2}
+				  Coords{1, -2}
+			  ]
+			  shapes: [.knight]
+		  },
+	  ]
 
