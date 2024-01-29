@@ -16,6 +16,8 @@ A Chess game written in V. Please feel free to contribute. All chess moves
 - [x] self-checking rule
 - [x] O-O, O-O-O (castling)
 - [x] en passant
+- [ ] check
+- [ ] checkmate
 - [ ] FEN
 - [ ] PGN
 - [ ] who's turn is it UI with pixel font

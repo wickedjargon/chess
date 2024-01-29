@@ -16,15 +16,11 @@ struct Attack {
 
 struct Coords { y int x int }
 
-struct Move { origin_coords Coords destination_coords Coords }
-
-fn (table [][]Piece) at (coords Coords) Piece {
-	return table[coords.y][coords.x]
-}
-
 fn (a Coords) + (b Coords) Coords {
 	return Coords {a.y + b.y, a.x + b.x}
 }
+
+struct Move { origin_coords Coords destination_coords Coords }
 
 fn king_not_attacked(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
 	move := Move{origin_coords, destination_coords}
@@ -34,25 +30,30 @@ fn king_not_attacked(game_board GameBoard, origin_coords Coords, destination_coo
 		oo:          game_board.oo.clone()
 		ooo:         game_board.ooo.clone()
 		en_passant:  game_board.en_passant
-		king_coords: game_board.king_coords
+		king_coords: game_board.king_coords.clone()
 	}
 	move_piece(mut game_board_tmp, move)
-	opposite_player := game_board_tmp.to_play
-	current_player := opposite_color(game_board_tmp.to_play)
+	coords := game_board_tmp.king_coords[opposite_color(game_board_tmp.to_play).str()]
+	attacking_color := game_board_tmp.to_play
+	return !coords_attacked(game_board_tmp.table, attacking_color, coords)
+}
+
+fn coords_attacked(game_board [][]Piece, attacking_color Color, coords Coords) bool {
+	attacked_color := opposite_color(attacking_color)
 	for attack in attacks {
 		for relative_coords in attack.relative_coords_list {
-			mut absolute_coords := game_board_tmp.king_coords[current_player.str()]
+			mut absolute_coords := coords
 			for within_board(absolute_coords) {
 				absolute_coords += relative_coords
-				if within_board(absolute_coords) && game_board_tmp.table.at(absolute_coords).color == current_player { break }
-				if within_board(absolute_coords) && game_board_tmp.table.at(absolute_coords).color == opposite_player && game_board_tmp.table.at(absolute_coords).shape in attack.shapes {
-					return false
+				if within_board(absolute_coords) && game_board.at(absolute_coords).color == attacked_color { break }
+				if within_board(absolute_coords) && game_board.at(absolute_coords).color == attacking_color && game_board.at(absolute_coords).shape in attack.shapes {
+					return true
 				}
 				if Shape.pawn in attack.shapes || Shape.knight in attack.shapes || Shape.king in attack.shapes { break }
 			}
 		}
 	}
-	return true
+	return false
 }
 
 fn get_legal_moves(game_board GameBoard, origin_coords Coords) []Coords {
@@ -93,8 +94,8 @@ fn set_legal_moves_game_board(mut legal_moves_game_board [][]bool, legal_moves [
 fn move_piece(mut game_board GameBoard, move Move) {
 	game_board.table[move.destination_coords.y][move.destination_coords.x] = game_board.table.at(move.origin_coords)
 	game_board.table[move.origin_coords.y][move.origin_coords.x] = Piece {  }
-	game_board.to_play = opposite_color(game_board.to_play)
 	move_sets(mut game_board, move)
+	game_board.to_play = opposite_color(game_board.to_play)
 }
 
 fn move_piece_no_sets(mut game_board GameBoard, move Move) {
@@ -136,9 +137,9 @@ fn move_sets(mut game_board GameBoard, move Move) {
 		move_piece_no_sets(mut game_board, Move{Coords{0, 0}, Coords{0, 3}})
 	} else if piece.shape == .king && piece.color  == .white && move == Move{Coords{7, 4}, Coords{7, 2}} { // white queen side castling move
 		move_piece_no_sets(mut game_board, Move{Coords{7, 0}, Coords{7, 3}})
-	} else if piece.shape == .rook && (move.origin_coords == Coords{0, 0} || move.origin_coords == Coords{7, 0}) {
+	} else if piece.shape == .rook && (move.origin_coords == Coords{0, 0} || move.origin_coords == Coords{7, 0}) { // rook move sets oo/ooo (castling) to false
 		game_board.ooo[piece.color.str()] = false
-	} else if piece.shape == .rook && (move.origin_coords == Coords{0, 7} || move.origin_coords == Coords{7, 7}) {
+	} else if piece.shape == .rook && (move.origin_coords == Coords{0, 7} || move.origin_coords == Coords{7, 7}) { // rook move sets oo/ooo (castling) to false
 		game_board.oo[piece.color.str()] = false
 	} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, -1) { // set en passant coords for next move
 		game_board.en_passant = move.destination_coords
@@ -150,9 +151,10 @@ fn move_sets(mut game_board GameBoard, move Move) {
 	} else if game_board.en_passant != EnPassant(false) {
 		game_board.en_passant = EnPassant(false)
 	}
-	// if check(game_board) {
-	// 	game_board.check[game_board.to_play.str()] = true
-	// }
+	if coords_attacked(game_board.table, game_board.to_play, game_board.king_coords[opposite_color(game_board.to_play).str()]) {
+		game_board.check[game_board.to_play.str()] = true
+		// TODO: find effecient checkmate predicate function
+	}
 }
 
 fn handle_destination_coords(mut app App, move Move) {

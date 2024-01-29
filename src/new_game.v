@@ -62,6 +62,10 @@ fn set_game_board(mut game_board GameBoard) {
 	game_board.en_passant = EnPassant(false)
 	game_board.king_coords['black'] = Coords{0, 4}
 	game_board.king_coords['white'] = Coords{7, 4}
+	game_board.check['white'] = false
+	game_board.check['black'] = false
+	game_board.checkmate['white'] = false
+	game_board.checkmate['black'] = false
 }
 
 fn new_game(mut app App) {

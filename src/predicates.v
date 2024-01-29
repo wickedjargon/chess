@@ -111,5 +111,3 @@ fn last_legal_was_capture(game_board GameBoard, origin_coords Coords, destinatio
 	}
 	return false
 }
-
-// self check:

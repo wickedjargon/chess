@@ -35,10 +35,16 @@ struct GameBoard {
 	mut:
 	table [][]Piece
 	to_play Color
-	oo       map[string]bool
-	ooo      map[string]bool
+	oo           map[string]bool
+	ooo          map[string]bool
+	check        map[string]bool
+	checkmate    map[string]bool
+	king_coords  map[string]Coords
 	en_passant EnPassant // a pawn's coords that can be captured next turn via en passant rule
-	king_coords            map[string]Coords
+}
+
+fn (table [][]Piece) at (coords Coords) Piece {
+	return table[coords.y][coords.x]
 }
 
 struct App {
