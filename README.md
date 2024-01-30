@@ -1,6 +1,6 @@
 # Chess game
 
-A Chess game written in V. Please feel free to contribute. All chess moves
+A Chess game written in V. Currently in development. Feel free to contribute.
 
 ## Screenshot
 ![screenshot](./screenshot.png)
@@ -16,7 +16,7 @@ A Chess game written in V. Please feel free to contribute. All chess moves
 - [x] self-checking rule
 - [x] O-O, O-O-O (castling)
 - [x] en passant
-- [ ] check
+- [x] check
 - [ ] checkmate
 - [ ] FEN
 - [ ] PGN

@@ -1,3 +1,8 @@
+// Jan 30 TODOs:
+// [ ] pawn jumps bug
+// [ ] checkmate
+// [ ] pawn promotion
+
 module main
 
 const white_oo_move = Move{Coords{7, 4}, Coords{7, 6}}
@@ -21,22 +26,6 @@ fn (a Coords) + (b Coords) Coords {
 }
 
 struct Move { origin_coords Coords destination_coords Coords }
-
-fn king_not_attacked(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
-	move := Move{origin_coords, destination_coords}
-	mut game_board_tmp := GameBoard {
-		table:       game_board.table.clone()
-		to_play:     game_board.to_play
-		oo:          game_board.oo.clone()
-		ooo:         game_board.ooo.clone()
-		en_passant:  game_board.en_passant
-		king_coords: game_board.king_coords.clone()
-	}
-	move_piece(mut game_board_tmp, move)
-	coords := game_board_tmp.king_coords[opposite_color(game_board_tmp.to_play).str()]
-	attacking_color := game_board_tmp.to_play
-	return !coords_attacked(game_board_tmp.table, attacking_color, coords)
-}
 
 fn coords_attacked(game_board [][]Piece, attacking_color Color, coords Coords) bool {
 	attacked_color := opposite_color(attacking_color)
@@ -110,6 +99,40 @@ fn handle_origin_coords(mut app App, origin_coords Coords) {
 	app.selection_state = .destination_coords
 }
 
+fn king_not_attacked(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
+	move := Move{origin_coords, destination_coords}
+	mut game_board_tmp := GameBoard {
+		table:       game_board.table.clone()
+		to_play:     game_board.to_play
+		oo:          game_board.oo.clone()
+		ooo:         game_board.ooo.clone()
+		en_passant:  game_board.en_passant
+		king_coords: game_board.king_coords.clone()
+	}
+	move_piece(mut game_board_tmp, move)
+	coords := game_board_tmp.king_coords[opposite_color(game_board_tmp.to_play).str()]
+	attacking_color := game_board_tmp.to_play
+	return !coords_attacked(game_board_tmp.table, attacking_color, coords)
+}
+
+fn handle_destination_coords(mut app App, move Move) {
+	move_piece(mut app.game_board, move)
+	set_check(mut app.game_board)
+	app.selection_state = .origin_coords
+}
+
+fn set_check(mut game_board GameBoard) {
+	if coords_attacked(game_board.table, opposite_color(game_board.to_play), game_board.king_coords[game_board.to_play.str()]) {
+		game_board.check[game_board.to_play.str()] = true
+
+		// TODO: find effecient checkmate predicate function
+		// does the king have any legal moves?
+		// list of attacking pieces
+		// if its a single piece, can you capture it?
+		// if its not a single piece, can you block ...
+	}
+}
+
 fn pawn_moved_two_spaces(game_board [][]Piece, move Move) bool {
 	return ((move.origin_coords.y == 6 && move.destination_coords.y == 4) ||
 			(move.origin_coords.y == 1 && move.destination_coords.y == 3)) &&
@@ -151,16 +174,6 @@ fn move_sets(mut game_board GameBoard, move Move) {
 	} else if game_board.en_passant != EnPassant(false) {
 		game_board.en_passant = EnPassant(false)
 	}
-	if coords_attacked(game_board.table, game_board.to_play, game_board.king_coords[opposite_color(game_board.to_play).str()]) {
-		game_board.check[game_board.to_play.str()] = true
-		// TODO: find effecient checkmate predicate function
-	}
-}
-
-fn handle_destination_coords(mut app App, move Move) {
-	move_piece(mut app.game_board, move)
-	app.selection_state = .origin_coords
-	// set_check(mut app.game_board)
 }
 
 fn handle_coords(mut app App, coords Coords) {
