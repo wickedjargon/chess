@@ -1,5 +1,4 @@
 # Chess game
-
 A Chess game written in V. Currently in development. Feel free to contribute.
 
 ## Screenshot

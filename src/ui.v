@@ -138,5 +138,11 @@ fn frame(app &App) {
 	if app.selection_state == .destination_coords {
 		app.draw_legal_moves()
 	}
+	to_play := app.game_board.to_play
+	if app.game_board.checkmate[to_play.str()] {
+		app.gg.draw_text(0, 0, "${to_play.str()} is in checkmate!")
+	} else if app.game_board.check[to_play.str()] {
+		app.gg.draw_text(0, 0, "${to_play.str()} is in check!")
+	}
 	app.gg.end()
 }

@@ -1,6 +1,7 @@
 module main
 
 import gg
+import gx
 
 enum Color {
 	not_set
