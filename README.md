@@ -16,7 +16,8 @@ A Chess game written in V. Currently in development. Feel free to contribute.
 - [x] O-O, O-O-O (castling)
 - [x] en passant
 - [x] check
-- [ ] checkmate
+- [x] checkmate
+- [ ] pawn promotion
 - [ ] FEN
 - [ ] PGN
 - [ ] who's turn is it UI with pixel font

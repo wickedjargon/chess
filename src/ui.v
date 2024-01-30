@@ -141,9 +141,9 @@ fn frame(app &App) {
 	}
 	to_play := app.game_board.to_play
 	if app.game_board.checkmate[to_play.str()] {
-        app.gg.draw_text(0, 88*8, "${to_play.str()} is in checkmate!", gx.TextCfg{color: gx.white, size: 50})
+        app.gg.draw_text(0, 88*8, "${to_play.str()} is in checkmate", gx.TextCfg{color: gx.white, size: 50})
 	} else if app.game_board.check[to_play.str()] {
-		app.gg.draw_text(0, 88*8, "${to_play.str()} is in check!", gx.TextCfg{color: gx.white, size: 50})
+		app.gg.draw_text(0, 88*8, "${to_play.str()} is in check", gx.TextCfg{color: gx.white, size: 50})
 	}
 	app.gg.end()
 }

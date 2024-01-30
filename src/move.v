@@ -1,7 +1,7 @@
-// Jan 30 TODOs:
+// TODOs:
 // [ ] pawn jumps bug
-// [ ] checkmate
 // [ ] pawn promotion
+// [ ] castling doesn't check if passing square is attacked
 
 module main
 
