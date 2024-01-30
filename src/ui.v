@@ -2,6 +2,7 @@ module main
 
 import gg
 import os
+import gx
 
 fn click(x f32, y f32, button gg.MouseButton, mut app App) {
 	game_board := app.image_database['game_board_image'] or { panic('line 108') }
@@ -140,9 +141,9 @@ fn frame(app &App) {
 	}
 	to_play := app.game_board.to_play
 	if app.game_board.checkmate[to_play.str()] {
-		app.gg.draw_text(0, 0, "${to_play.str()} is in checkmate!")
+        app.gg.draw_text(0, 88*8, "${to_play.str()} is in checkmate!", gx.TextCfg{color: gx.white, size: 50})
 	} else if app.game_board.check[to_play.str()] {
-		app.gg.draw_text(0, 0, "${to_play.str()} is in check!")
+		app.gg.draw_text(0, 88*8, "${to_play.str()} is in check!", gx.TextCfg{color: gx.white, size: 50})
 	}
 	app.gg.end()
 }

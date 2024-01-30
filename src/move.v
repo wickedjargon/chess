@@ -126,10 +126,13 @@ fn set_check(mut game_board GameBoard) {
 		game_board.check[game_board.to_play.str()] = true
 		if is_checkmate(game_board, game_board.to_play) {
 			game_board.checkmate[game_board.to_play.str()] = true
-			dump(game_board.checkmate[game_board.to_play.str()])
-			dump(game_board.to_play)
+		} else {
+			game_board.checkmate[game_board.to_play.str()] = false
 		}
 
+	} else {
+		game_board.check[game_board.to_play.str()] = false
+		game_board.checkmate[game_board.to_play.str()] = false
 	}
 }
 
@@ -156,7 +159,7 @@ fn is_checkmate(game_board GameBoard, color Color) bool {
 					}
 
 					move_piece(mut game_board_copy, move)
-					if !coords_attacked(game_board_copy.table, opposite_color(game_board_copy.to_play), king_coords) {
+					if !coords_attacked(game_board_copy.table, game_board_copy.to_play, king_coords) {
 						return false
 					}
 				}
