@@ -25,6 +25,10 @@ fn (a Coords) + (b Coords) Coords {
 	return Coords {a.y + b.y, a.x + b.x}
 }
 
+fn (a Coords) - (b Coords) Coords {
+	return Coords {a.y - b.y, a.x - b.x}
+}
+
 struct Move { origin_coords Coords destination_coords Coords }
 
 fn coords_attacked(game_board [][]Piece, attacking_color Color, coords Coords) bool {

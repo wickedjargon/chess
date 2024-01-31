@@ -571,7 +571,7 @@ const move_rules_map = {
 				y: 2
 				x: 0
 			}
-			conditions: [destination_no_same_color, origin_index_1_row, destination_no_capture]
+			conditions: [destination_no_same_color, origin_index_1_row, destination_no_capture, black_cant_jump_over]
 			break_conditions: [only_one]
 		},
 		RelativeCoords{
@@ -621,7 +621,7 @@ const move_rules_map = {
 				y: -2
 				x: 0
 			}
-			conditions: [destination_no_same_color, origin_index_6_row, destination_no_capture]
+			conditions: [destination_no_same_color, origin_index_6_row, destination_no_capture, white_cant_jump_over]
 			break_conditions: [only_one]
 		},
 		RelativeCoords{

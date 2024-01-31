@@ -37,6 +37,15 @@ fn any_condition_met(game_board GameBoard, origin_coords Coords, destination_coo
 // pre loop condition:
 
 
+fn white_cant_jump_over(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
+	return game_board.table.at(origin_coords - Coords{1, 0}).shape == .empty_square
+}
+
+
+fn black_cant_jump_over(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
+	return game_board.table.at(origin_coords + Coords{1, 0}).shape == .empty_square
+}
+
 fn en_passant_white(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
 	return EnPassant(destination_coords + Coords{1, 0}) == game_board.en_passant
 }
@@ -111,3 +120,4 @@ fn last_legal_was_capture(game_board GameBoard, origin_coords Coords, destinatio
 	}
 	return false
 }
+
