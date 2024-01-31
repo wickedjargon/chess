@@ -711,4 +711,3 @@ const attacks =
 			  shapes: [.knight]
 		  },
 	  ]
-
