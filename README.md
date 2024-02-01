@@ -17,7 +17,11 @@ A Chess game written in V. Currently in development. Feel free to contribute.
 - [x] en passant
 - [x] check
 - [x] checkmate
+- [ ] stale mate
 - [ ] pawn promotion
+- [ ] repetitive check
+- [ ] repetitive move
+- [ ] 50-move-after-last-capture rule
 - [ ] FEN
 - [ ] PGN
 - [ ] who's turn is it UI with pixel font
@@ -25,4 +29,3 @@ A Chess game written in V. Currently in development. Feel free to contribute.
 - [ ] drag piece from origin to destination
 - [ ] test cases
 - [ ] chess clock
-- [ ] 50-move-after-last-capture rule

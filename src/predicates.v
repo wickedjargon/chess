@@ -78,29 +78,42 @@ fn destination_no_same_color(game_board GameBoard, origin_coords Coords, destina
 // casting: // update to account for king and rook attacks
 
 fn black_oo (game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
+	to_play := game_board.to_play
 	return game_board.oo['black'] == true &&
 		game_board.table.at(Coords{0, 5}).shape == .empty_square &&
-		game_board.table.at(Coords{0, 6}).shape == .empty_square
+		game_board.table.at(Coords{0, 6}).shape == .empty_square &&
+		game_board.check[to_play.str()] == false &&
+		!coords_attacked(game_board.table, opposite_color(to_play), Coords{0, 5})
 }
 
 fn white_oo (game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
+	to_play := game_board.to_play
 	return game_board.oo['white'] == true &&
 		game_board.table.at(Coords{7, 5}).shape == .empty_square &&
-		game_board.table.at(Coords{7, 6}).shape == .empty_square
+		game_board.table.at(Coords{7, 6}).shape == .empty_square &&
+		game_board.check[to_play.str()] == false &&
+		!coords_attacked(game_board.table, opposite_color(to_play), Coords{7, 5})
 }
 
 fn black_ooo (game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
+	to_play := game_board.to_play
 	return game_board.ooo['black'] == true &&
 		game_board.table.at(Coords{0, 1}).shape == .empty_square &&
 		game_board.table.at(Coords{0, 2}).shape == .empty_square &&
-		game_board.table.at(Coords{0, 3}).shape == .empty_square
+		game_board.table.at(Coords{0, 3}).shape == .empty_square &&
+		game_board.check[to_play.str()] == false &&
+		!coords_attacked(game_board.table, opposite_color(to_play), Coords{0, 3})
+
 }
 
 fn white_ooo (game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
+	to_play := game_board.to_play
 	return game_board.ooo['white'] == true &&
 		game_board.table.at(Coords{7, 1}).shape == .empty_square &&
 		game_board.table.at(Coords{7, 2}).shape == .empty_square &&
-		game_board.table.at(Coords{7, 3}).shape == .empty_square
+		game_board.table.at(Coords{7, 3}).shape == .empty_square &&
+		game_board.check[to_play.str()] == false &&
+		!coords_attacked(game_board.table, opposite_color(to_play), Coords{7, 3})
 }
 
 // post loop conditions:
@@ -108,7 +121,6 @@ fn white_ooo (game_board GameBoard, origin_coords Coords, destination_coords Coo
 fn only_one(game_board GameBoard, origin_coords Coords, destination_coords Coords, legal_moves []Coords) bool {
 	return true
 }
-
 
 fn last_legal_was_capture(game_board GameBoard, origin_coords Coords, destination_coords Coords, legal_moves []Coords) bool {
 	if legal_moves.len == 0 {
