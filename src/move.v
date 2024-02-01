@@ -1,7 +1,5 @@
 // TODOs:
-// [ ] pawn jumps bug
 // [ ] pawn promotion
-// [ ] castling doesn't check if passing square is attacked
 
 module main
 
@@ -177,7 +175,7 @@ fn is_checkmate(game_board GameBoard, color Color) bool {
 fn pawn_moved_two_spaces(game_board [][]Piece, move Move) bool {
 	return ((move.origin_coords.y == 6 && move.destination_coords.y == 4) ||
 			(move.origin_coords.y == 1 && move.destination_coords.y == 3)) &&
-		game_board.at(move.origin_coords).shape == .pawn
+		game_board.at(move.destination_coords).shape == .pawn
 }
 
 fn side_piece_is_opposite_color(game_board [][]Piece, move Move, offset int) bool {
@@ -212,9 +210,11 @@ fn move_sets(mut game_board GameBoard, move Move) {
 	} else if piece.shape == .pawn && EnPassant(move.destination_coords + if piece.color == .white { Coords{ 1, 0} } else { Coords{ -1, 0} }) == game_board.en_passant { // made the en passant move
 		capture_coords := move.destination_coords + if piece.color == .white { Coords{ 1, 0} } else { Coords{ -1, 0} }
 		game_board.table[capture_coords.y][capture_coords.x] = Piece { }
-	} else if game_board.en_passant != EnPassant(false) {
-		game_board.en_passant = EnPassant(false)
 	}
+
+	// else if game_board.en_passant != EnPassant(false) {
+	// 	game_board.en_passant = EnPassant(false)
+	// }
 }
 
 fn handle_coords(mut app App, coords Coords) {
