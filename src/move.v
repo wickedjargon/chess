@@ -186,6 +186,7 @@ fn side_piece_is_opposite_color(game_board [][]Piece, move Move, offset int) boo
 }
 
 fn move_sets(mut game_board GameBoard, move Move) {
+
 	piece := game_board.table.at(move.destination_coords)
 	if piece.shape == .king {
 		game_board.king_coords[piece.color.str()] = move.destination_coords
@@ -203,18 +204,20 @@ fn move_sets(mut game_board GameBoard, move Move) {
 		game_board.ooo[piece.color.str()] = false
 	} else if piece.shape == .rook && (move.origin_coords == Coords{0, 7} || move.origin_coords == Coords{7, 7}) { // rook move sets oo/ooo (castling) to false
 		game_board.oo[piece.color.str()] = false
-	} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, -1) { // set en passant coords for next move
+	} else if ((piece.shape == .pawn) && (move.destination_coords.y == 7)) || ((piece.shape == .pawn) && (move.destination_coords.y == 0)) {
+		game_board.table[move.destination_coords.y][move.destination_coords.x] = Piece { shape: .queen, color: piece.color, map_key: "${piece.color}_queen" }
+	}
+
+	if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, -1) { // set en passant coords for next move
 		game_board.en_passant = move.destination_coords
 	} else if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, 1) { //	 set en passant coords for next move
 		game_board.en_passant = move.destination_coords
 	} else if piece.shape == .pawn && EnPassant(move.destination_coords + if piece.color == .white { Coords{ 1, 0} } else { Coords{ -1, 0} }) == game_board.en_passant { // made the en passant move
 		capture_coords := move.destination_coords + if piece.color == .white { Coords{ 1, 0} } else { Coords{ -1, 0} }
 		game_board.table[capture_coords.y][capture_coords.x] = Piece { }
+	} else if game_board.en_passant != EnPassant(false) {
+		game_board.en_passant = EnPassant(false)
 	}
-
-	// else if game_board.en_passant != EnPassant(false) {
-	// 	game_board.en_passant = EnPassant(false)
-	// }
 }
 
 fn handle_coords(mut app App, coords Coords) {
