@@ -1,6 +1,3 @@
-// TODOs:
-// [ ] pawn promotion
-
 module main
 
 const white_oo_move = Move{Coords{7, 4}, Coords{7, 6}}
