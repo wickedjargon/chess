@@ -48,8 +48,7 @@ fn get_legal_moves(game_board GameBoard, origin_coords Coords) []Coords {
 	origin_piece := game_board.table.at(origin_coords)
 	mut legal_moves := []Coords{}
 	for relative_coords in move_rules_map[origin_piece.map_key] {
-		mut absolute_destination_coords := origin_coords + relative_coords.relative_coords
-		for ;
+		for absolute_destination_coords := origin_coords + relative_coords.relative_coords ;
 		within_board(absolute_destination_coords)
 			&& all_conditions_met(game_board,
 								  origin_coords,
@@ -57,11 +56,9 @@ fn get_legal_moves(game_board GameBoard, origin_coords Coords) []Coords {
 								  relative_coords.conditions) ;
 		absolute_destination_coords += relative_coords.relative_coords
 		{
-			if king_attacked(game_board, origin_coords, absolute_destination_coords) {
-				continue
+			if !king_attacked(game_board, origin_coords, absolute_destination_coords) { // prevents player from checking himself
+				legal_moves << absolute_destination_coords
 			}
-
-			legal_moves << absolute_destination_coords
 			if any_condition_met(game_board, origin_coords, absolute_destination_coords, legal_moves, relative_coords.break_conditions)
 			{ break }
 		}
