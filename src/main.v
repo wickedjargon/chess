@@ -40,6 +40,7 @@ struct GameBoard {
 	ooo          map[string]bool
 	check        map[string]bool
 	checkmate    map[string]bool
+	stalemate    map[string]bool
 	king_coords  map[string]Coords
 	en_passant   EnPassant // a pawn's coords that can be captured next turn via en passant rule
 }

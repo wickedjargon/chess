@@ -66,6 +66,8 @@ fn set_game_board(mut game_board GameBoard) {
 	game_board.check['black'] = false
 	game_board.checkmate['white'] = false
 	game_board.checkmate['black'] = false
+	game_board.stalemate['white'] = false
+	game_board.stalemate['black'] = false
 }
 
 fn new_game(mut app App) {
