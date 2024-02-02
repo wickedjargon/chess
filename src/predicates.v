@@ -36,7 +36,6 @@ fn any_condition_met(game_board GameBoard, origin_coords Coords, destination_coo
 
 // pre loop condition:
 
-
 fn white_cant_jump_over(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
 	return game_board.table.at(origin_coords - Coords{1, 0}).shape == .empty_square
 }
@@ -103,7 +102,6 @@ fn black_ooo (game_board GameBoard, origin_coords Coords, destination_coords Coo
 		game_board.table.at(Coords{0, 3}).shape == .empty_square &&
 		game_board.check[to_play.str()] == false &&
 		!coords_attacked(game_board.table, opposite_color(to_play), Coords{0, 3})
-
 }
 
 fn white_ooo (game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
