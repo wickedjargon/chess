@@ -54,11 +54,13 @@ fn get_legal_moves(game_board GameBoard, origin_coords Coords) []Coords {
 			&& all_conditions_met(game_board,
 								  origin_coords,
 								  absolute_destination_coords,
-								  relative_coords.conditions)
-			&& king_not_attacked(game_board, origin_coords, absolute_destination_coords)
-		;
+								  relative_coords.conditions) ;
 		absolute_destination_coords += relative_coords.relative_coords
 		{
+			if king_attacked(game_board, origin_coords, absolute_destination_coords) {
+				continue
+			}
+
 			legal_moves << absolute_destination_coords
 			if any_condition_met(game_board, origin_coords, absolute_destination_coords, legal_moves, relative_coords.break_conditions)
 			{ break }
@@ -98,7 +100,7 @@ fn handle_origin_coords(mut app App, origin_coords Coords) {
 	app.selection_state = .destination_coords
 }
 
-fn king_not_attacked(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
+fn king_attacked(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
 	move := Move{origin_coords, destination_coords}
 	mut game_board_tmp := GameBoard {
 		table:		 game_board.table.clone()
@@ -111,7 +113,7 @@ fn king_not_attacked(game_board GameBoard, origin_coords Coords, destination_coo
 	move_piece(mut game_board_tmp, move)
 	coords := game_board_tmp.king_coords[opposite_color(game_board_tmp.to_play).str()]
 	attacking_color := game_board_tmp.to_play
-	return !coords_attacked(game_board_tmp.table, attacking_color, coords)
+	return coords_attacked(game_board_tmp.table, attacking_color, coords)
 }
 
 fn handle_destination_coords(mut app App, move Move) {
