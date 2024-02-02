@@ -55,6 +55,8 @@ fn (mut app App) init_images() ! {
 	app.image_database['game_board_image'] = app.gg.create_image(os.resource_abs_path('./assets/game_board_image.png'))!
 	app.image_database['game_board_image_flipped'] = app.gg.create_image(os.resource_abs_path('./assets/game_board_image_flipped.png'))!
 	app.image_database['circle'] = app.gg.create_image(os.resource_abs_path('./assets/circle.png'))!
+	app.image_database['black_king_red'] = app.gg.create_image(os.resource_abs_path('./assets/black_king_red.png'))!
+	app.image_database['white_king_red'] = app.gg.create_image(os.resource_abs_path('./assets/white_king_red.png'))!
 }
 
 
