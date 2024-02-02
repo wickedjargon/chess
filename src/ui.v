@@ -86,17 +86,17 @@ fn (app App) draw_pieces() {
 }
 
 fn (app App) draw_pieces_flipped() {
-    max_y_coord := app.game_board.table.len - 1
-    for y_coord := max_y_coord; y_coord >= 0; y_coord-- {
-        for x_coord, piece in app.game_board.table[y_coord] {
-            if piece.shape != .empty_square {
-                piece_image := app.image_database[piece.map_key] or { panic('draw_pieces_flipped') }
-                // Flip the y_coord by subtracting it from the max_y_coord
-                flipped_y_coord := max_y_coord - y_coord
-                app.draw_piece_at_coordinate(piece_image, x_coord, flipped_y_coord)
-            }
-        }
-    }
+	max_y_coord := app.game_board.table.len - 1
+	for y_coord := max_y_coord; y_coord >= 0; y_coord-- {
+		for x_coord, piece in app.game_board.table[y_coord] {
+			if piece.shape != .empty_square {
+				piece_image := app.image_database[piece.map_key] or { panic('draw_pieces_flipped') }
+				// Flip the y_coord by subtracting it from the max_y_coord
+				flipped_y_coord := max_y_coord - y_coord
+				app.draw_piece_at_coordinate(piece_image, x_coord, flipped_y_coord)
+			}
+		}
+	}
 }
 
 fn (app App) draw_piece_at_coordinate(piece gg.Image, x int, y int) {
@@ -141,7 +141,7 @@ fn frame(app &App) {
 	}
 	to_play := app.game_board.to_play
 	if app.game_board.checkmate[to_play.str()] {
-        app.gg.draw_text(0, 88*8, "${to_play.str()} is in checkmate", gx.TextCfg{color: gx.white, size: 50})
+		app.gg.draw_text(0, 88*8, "${to_play.str()} is in checkmate", gx.TextCfg{color: gx.white, size: 50})
 	} else if app.game_board.check[to_play.str()] {
 		app.gg.draw_text(0, 88*8, "${to_play.str()} is in check", gx.TextCfg{color: gx.white, size: 50})
 	}
