@@ -74,7 +74,7 @@ fn destination_no_same_color(game_board GameBoard, origin_coords Coords, destina
 	return game_board.table.at(destination_coords).color != game_board.table.at(origin_coords).color
 }
 
-// casting: // update to account for king and rook attacks
+// castling: // update to account for king and rook attacks
 
 fn black_oo (game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
 	to_play := game_board.to_play

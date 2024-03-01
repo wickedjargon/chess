@@ -8,19 +8,15 @@ fn click(x f32, y f32, button gg.MouseButton, mut app App) {
 	game_board := app.image_database['game_board_image'] or { panic('line 108') }
 	game_board_width := game_board.width
 	game_board_height := game_board.height
-
 	// Check if the click is within the chessgame_board bounds
 	if x < 0.0 || x > f32(game_board_width) || y < 0.0 || y > f32(game_board_height) {
 		return
 	}
-
 	// Calculate the square indices based on the clicked coordinates
 	square_size_y := f32(game_board_height) / f32(game_board_dimension)
 	square_size_x := f32(game_board_width) / f32(game_board_dimension)
-
 	mut y_coord := int(y / square_size_y)
 	x_coord := int(x / square_size_x)
-
 	if app.game_board.to_play == .black {
 		// Flip the y_coord by subtracting it from the max_y_coord
 		max_y_coord := app.game_board.table.len - 1
@@ -58,7 +54,6 @@ fn (mut app App) init_images() ! {
 	app.image_database['black_king_red'] = app.gg.create_image(os.resource_abs_path('./assets/black_king_red.png'))!
 	app.image_database['white_king_red'] = app.gg.create_image(os.resource_abs_path('./assets/white_king_red.png'))!
 }
-
 
 fn (mut app App) init_images_wrapper() {
 	app.init_images() or { panic(err) }
@@ -105,10 +100,8 @@ fn (app App) draw_piece_at_coordinate(piece gg.Image, x int, y int) {
 	game_board_image := app.image_database['game_board_image'] or { panic('line 48') }
 	square_width := f32(game_board_image.width) / f32(game_board_dimension)
 	square_height := f32(game_board_image.height) / f32(game_board_dimension)
-
 	x_coord := square_width * f32(x) + (square_width - f32(piece.width)) / 2.0
 	y_coord := square_height * f32(y) + (square_height - f32(piece.height)) / 2.0
-
 	app.gg.draw_image(x_coord, y_coord, f32(piece.width), f32(piece.height), piece)
 }
 
