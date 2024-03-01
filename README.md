@@ -17,8 +17,9 @@ A Chess game written in V. Currently in development. Feel free to contribute.
 - [x] en passant
 - [x] check
 - [x] checkmate
-- [ ] stale mate
-- [ ] pawn promotion
+- [x] stale mate
+- [x] pawn promotion (auto queen for now)
+- [ ] pawn promotion menu
 - [ ] repetitive check
 - [ ] repetitive move
 - [ ] 50-move-after-last-capture rule
