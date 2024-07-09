@@ -68,8 +68,8 @@ fn get_legal_moves(game_board GameBoard, origin_coords Coords) []Coords {
 
 
 fn set_legal_moves_game_board(mut legal_moves_game_board [][]bool, legal_moves []Coords) {
-	for y, mut row in legal_moves_game_board {
-		for x, mut cell in row {
+	for _, mut row in legal_moves_game_board {
+		for _, mut cell in row {
 			cell = false
 		}
 	}
