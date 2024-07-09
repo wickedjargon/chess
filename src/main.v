@@ -20,8 +20,8 @@ enum Shape {
 }
 
 struct Piece {
-	color Color = .not_set
-	shape Shape = .empty_square
+	color   Color  = .not_set
+	shape   Shape  = .empty_square
 	map_key string = 'empty_square'
 }
 
@@ -33,24 +33,24 @@ enum SelectionState {
 type EnPassant = Coords | bool
 
 struct GameBoard {
-	mut:
-	table        [][]Piece
-	to_play      Color
-	oo           map[string]bool
-	ooo          map[string]bool
-	check        map[string]bool
-	checkmate    map[string]bool
-	stalemate    map[string]bool
-	king_coords  map[string]Coords
-	en_passant   EnPassant // a pawn's coords that can be captured next turn via en passant rule
+mut:
+	table       [][]Piece
+	to_play     Color
+	oo          map[string]bool
+	ooo         map[string]bool
+	check       map[string]bool
+	checkmate   map[string]bool
+	stalemate   map[string]bool
+	king_coords map[string]Coords
+	en_passant  EnPassant // a pawn's coords that can be captured next turn via en passant rule
 }
 
-fn (table [][]Piece) at (coords Coords) Piece {
+fn (table [][]Piece) at(coords Coords) Piece {
 	return table[coords.y][coords.x]
 }
 
 struct App {
-	mut:
+mut:
 	gg                     &gg.Context = unsafe { nil }
 	image_database         map[string]gg.Image
 	game_board             GameBoard
