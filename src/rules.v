@@ -692,6 +692,7 @@ const attacks =
 		  },
 		  Attack {
 			  relative_coords_list: [Coords{-1, -1}, Coords{-1, 1}]
+			  shapes: [.pawn]
 		  },
 		  Attack {
 			  relative_coords_list: [Coords{1, -1}, Coords{1, 1}]
