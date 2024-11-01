@@ -28,16 +28,46 @@ struct Move { origin_coords Coords destination_coords Coords }
 
 fn coords_attacked(game_board [][]Piece, attacking_color Color, coords Coords) bool {
 	attacked_color := opposite_color(attacking_color)
+
 	for attack in attacks {
 		for relative_coords in attack.relative_coords_list {
 			mut absolute_coords := coords
 			for within_board(absolute_coords) {
-				absolute_coords += relative_coords
-				if within_board(absolute_coords) && game_board.at(absolute_coords).color == attacked_color { break }
-				if within_board(absolute_coords) && game_board.at(absolute_coords).color == attacking_color && game_board.at(absolute_coords).shape in attack.shapes {
+				// Create new Coords to move to the next cell
+				next_coords := Coords{
+					x: absolute_coords.x + relative_coords.x
+					y: absolute_coords.y + relative_coords.y
+				}
+
+				// Update absolute_coords to next_coords
+				absolute_coords = next_coords
+
+				// Check if we're  gone out of bounds
+				if !within_board(absolute_coords) {
+					break
+				}
+
+				piece := game_board[absolute_coords.y][absolute_coords.x] // Access piece at the new location
+
+				// If we hit an opponent's piece, stop looking further in this direction
+				if piece.color == attacked_color {
+					break
+				}
+
+				// If we hit the attacking color's piece and it can attack in this direction
+				if piece.color == attacking_color && piece.shape in attack.shapes {
 					return true
 				}
-				if Shape.pawn in attack.shapes || Shape.knight in attack.shapes || Shape.king in attack.shapes { break }
+
+				// Break after checking one square for short-range attackers
+				if Shape.pawn in attack.shapes || Shape.knight in attack.shapes || Shape.king in attack.shapes {
+					break
+				}
+
+				// If any piece is blocking further movement, we should break
+				if piece.color != .not_set {
+					break
+				}
 			}
 		}
 	}
