@@ -189,7 +189,7 @@ fn is_checkmate(game_board GameBoard, color Color) bool {
 						king_coords: game_board.king_coords.clone(),
 					}
 					move_piece(mut game_board_copy, move)
-					if !coords_attacked(game_board_copy.table, game_board_copy.to_play, king_coords) {
+					if !coords_attacked(game_board_copy.table, game_board_copy.to_play, game_board_copy.king_coords[color.str()]) {
 						return false
 					}
 				}
