@@ -173,10 +173,30 @@ fn is_checkmate(game_board GameBoard, color Color) bool {
 	if !coords_attacked(game_board.table, opposite_color(color), king_coords) {
 		return false
 	}
-	if get_legal_moves(game_board, king_coords).len == 0 {
-		return true
+	for y, row in game_board.table {
+		for x, piece in row {
+			if piece.color == color {
+				origin_coords := Coords{y, x}
+				legal_moves := get_legal_moves(game_board, origin_coords)
+				for _, destination_coords in legal_moves {
+					move := Move{origin_coords, destination_coords}
+					mut game_board_copy := GameBoard{
+						table:		 game_board.table.clone(),
+						to_play:	 color,
+						oo:			 game_board.oo.clone(),
+						ooo:		 game_board.ooo.clone(),
+						en_passant:	 game_board.en_passant,
+						king_coords: game_board.king_coords.clone(),
+					}
+					move_piece(mut game_board_copy, move)
+					if !coords_attacked(game_board_copy.table, game_board_copy.to_play, king_coords) {
+						return false
+					}
+				}
+			}
+		}
 	}
-	return false
+	return true
 }
 
 fn is_stalemate(game_board GameBoard, color Color) bool {
