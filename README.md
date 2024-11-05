@@ -30,3 +30,5 @@ A Chess game written in V. Currently in development. Feel free to contribute.
 - [ ] drag piece from origin to destination
 - [ ] test cases
 - [ ] chess clock
+- [ ] Implement UCI Integration (To play a chess engine like stockfish)
+- [ ] more impressive user interface
