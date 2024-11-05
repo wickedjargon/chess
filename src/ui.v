@@ -5,7 +5,7 @@ import os
 import gx
 
 fn click(x f32, y f32, button gg.MouseButton, mut app App) {
-	game_board := app.image_database['game_board_image'] or { panic('click') }
+	game_board := app.image_database['game_board_image'] or { panic('click function error') }
 	game_board_width := game_board.width
 	game_board_height := game_board.height
 	// Check if the click is within the chessgame_board bounds
@@ -56,17 +56,17 @@ fn (mut app App) init_images() ! {
 }
 
 fn (mut app App) init_images_wrapper() {
-	app.init_images() or { panic('init_images_wrapper') }
+	app.init_images() or { panic('init_images_wrapper error') }
 }
 
 fn (app App) draw_game_board() {
-	game_board_image := app.image_database['game_board_image'] or { panic('draw_game_board') }
+	game_board_image := app.image_database['game_board_image'] or { panic('draw_game_board error') }
 	app.gg.draw_image(0.0, 0.0, f32(game_board_image.width), f32(game_board_image.height),
 		game_board_image)
 }
 
 fn (app App) draw_game_board_flipped() {
-	game_board_image := app.image_database['game_board_image_flipped'] or { panic('draw_game_board_flipped') }
+	game_board_image := app.image_database['game_board_image_flipped'] or { panic('draw_game_board_flipped error') }
 	app.gg.draw_image(0.0, 0.0, f32(game_board_image.width), f32(game_board_image.height),
 		game_board_image)
 }
@@ -75,7 +75,7 @@ fn (app App) draw_pieces() {
 	for y_coord, rows in app.game_board.table {
 		for x_coord, piece in rows {
 			if piece.shape != .empty_square {
-				piece_image := app.image_database[piece.map_key] or { panic('draw_pieces') }
+				piece_image := app.image_database[piece.map_key] or { panic('draw_pieces error') }
 				app.draw_piece_at_coordinate(piece_image, x_coord, y_coord)
 			}
 		}
@@ -87,7 +87,7 @@ fn (app App) draw_pieces_flipped() {
 	for y_coord := max_y_coord; y_coord >= 0; y_coord-- {
 		for x_coord, piece in app.game_board.table[y_coord] {
 			if piece.shape != .empty_square {
-				piece_image := app.image_database[piece.map_key] or { panic('draw_pieces_flipped') }
+				piece_image := app.image_database[piece.map_key] or { panic('draw_pieces_flipped error') }
 				// Flip the y_coord by subtracting it from the max_y_coord
 				flipped_y_coord := max_y_coord - y_coord
 				app.draw_piece_at_coordinate(piece_image, x_coord, flipped_y_coord)
@@ -97,7 +97,7 @@ fn (app App) draw_pieces_flipped() {
 }
 
 fn (app App) draw_piece_at_coordinate(piece gg.Image, x int, y int) {
-	game_board_image := app.image_database['game_board_image'] or { panic('draw_piece_at_coordinate') }
+	game_board_image := app.image_database['game_board_image'] or { panic('draw_piece_at_coordinate error') }
 	square_width := f32(game_board_image.width) / f32(game_board_dimension)
 	square_height := f32(game_board_image.height) / f32(game_board_dimension)
 	x_coord := square_width * f32(x) + (square_width - f32(piece.width)) / 2.0
@@ -109,7 +109,7 @@ fn (app App) draw_legal_moves() {
 	for y, rows in app.legal_moves_game_board {
 		for x, cell in rows {
 			if cell == true && app.game_board.table[y][x].shape != .king {
-				piece_image := app.image_database['circle'] or { panic('draw_legal_moves') }
+				piece_image := app.image_database['circle'] or { panic('draw_legal_moves error') }
 				if app.game_board.to_play == .black {
 					max_y_coord := app.legal_moves_game_board.len - 1
 					flipped_y_coord := max_y_coord - y
