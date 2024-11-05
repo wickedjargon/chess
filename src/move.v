@@ -247,6 +247,7 @@ fn move_sets(mut app App, mut game_board GameBoard, move Move) {
 		game_board.oo[piece.color.str()] = false
 	} else if ((piece.shape == .pawn) && (move.destination_coords.y == 7)) || ((piece.shape == .pawn) && (move.destination_coords.y == 0)) {
 		// TODO: update app.promotion_pieces_game_board to ask user where to move.
+		app.selection_state = .promotion_menu
 		game_board.table[move.destination_coords.y][move.destination_coords.x] = Piece { shape: .queen, color: piece.color, map_key: "${piece.color}_queen" } // pawn auto queen
 	}
 	if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, -1) { // set en passant coords for next move

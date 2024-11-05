@@ -27,6 +27,7 @@ struct Piece {
 enum SelectionState {
 	origin_coords
 	destination_coords
+	promotion_menu
 }
 
 type EnPassant = Coords | bool
