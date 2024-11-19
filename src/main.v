@@ -56,7 +56,7 @@ mut:
 	game_board             GameBoard
 	legal_moves            []Coords
 	legal_moves_game_board [][]bool
-	promotion_pieces_game_board [][]Piece
+	promotion_game_board   [][]Piece
 	selection_state        SelectionState
 	origin_coords          Coords
 }

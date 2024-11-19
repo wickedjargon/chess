@@ -96,7 +96,6 @@ fn get_legal_moves(mut app App, game_board GameBoard, origin_coords Coords) []Co
 	return legal_moves
 }
 
-
 fn set_legal_moves_game_board(mut legal_moves_game_board [][]bool, legal_moves []Coords) {
 	for _, mut row in legal_moves_game_board {
 		for _, mut cell in row {
@@ -106,6 +105,10 @@ fn set_legal_moves_game_board(mut legal_moves_game_board [][]bool, legal_moves [
 	for legal_move in legal_moves {
 		legal_moves_game_board[legal_move.y][legal_move.x] = true
 	}
+}
+
+fn set_promotion_game_board(mut promotion_game_board [][]Piece, coords Coords) {
+	dump(coords)
 }
 
 fn move_piece(mut app App, mut game_board GameBoard, move Move) {
@@ -248,7 +251,8 @@ fn move_sets(mut app App, mut game_board GameBoard, move Move) {
 	} else if ((piece.shape == .pawn) && (move.destination_coords.y == 7)) || ((piece.shape == .pawn) && (move.destination_coords.y == 0)) {
 		// TODO: update app.promotion_pieces_game_board to ask user where to move.
 		app.selection_state = .promotion_menu
-		game_board.table[move.destination_coords.y][move.destination_coords.x] = Piece { shape: .queen, color: piece.color, map_key: "${piece.color}_queen" } // pawn auto queen
+		set_promotion_game_board(mut app.promotion_game_board, move.destination_coords)
+		// game_board.table[move.destination_coords.y][move.destination_coords.x] = Piece { shape: .queen, color: piece.color, map_key: "${piece.color}_queen" } // pawn auto queen
 	}
 	if pawn_moved_two_spaces(game_board.table, move) && side_piece_is_opposite_color(game_board.table, move, -1) { // set en passant coords for next move
 		game_board.en_passant = move.destination_coords

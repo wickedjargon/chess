@@ -105,6 +105,7 @@ fn (app App) draw_piece_at_coordinate(piece gg.Image, x int, y int) {
 	app.gg.draw_image(x_coord, y_coord, f32(piece.width), f32(piece.height), piece)
 }
 
+// saved-location-2
 fn (app App) draw_legal_moves() {
 	for y, rows in app.legal_moves_game_board {
 		for x, cell in rows {
