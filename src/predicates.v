@@ -1,133 +1,133 @@
 module main
 
 fn opposite_color(color Color) Color {
-	if color == .black {
-		return Color.white
-	} else if color == .white {
-		return Color.black
-	}
-	return Color.not_set
+    if color == .black {
+        return Color.white
+    } else if color == .white {
+        return Color.black
+    }
+    return Color.not_set
 }
 
 fn within_board(absolute_destination_coords Coords) bool {
-	return absolute_destination_coords.x >= 0
-		&& absolute_destination_coords.x < game_board_dimension
-		&& absolute_destination_coords.y >= 0
-		&& absolute_destination_coords.y < game_board_dimension
+    return absolute_destination_coords.x >= 0
+        && absolute_destination_coords.x < game_board_dimension
+        && absolute_destination_coords.y >= 0
+        && absolute_destination_coords.y < game_board_dimension
 }
 
 fn all_conditions_met(game_board GameBoard, origin_coords Coords, destination_coords Coords, conditions []fn (GameBoard, Coords, Coords) bool ) bool {
-	for condition in conditions {
-		if condition(game_board, origin_coords, destination_coords) == false {
-			return false
-		}
-	}
-	return true
+    for condition in conditions {
+        if condition(game_board, origin_coords, destination_coords) == false {
+            return false
+        }
+    }
+    return true
 }
 
 fn any_condition_met(game_board GameBoard, origin_coords Coords, destination_coords Coords, legal_moves []Coords, break_conditions []fn (GameBoard, Coords, Coords, []Coords) bool ) bool {
-	for condition in break_conditions {
-		if condition(game_board, origin_coords, destination_coords, legal_moves) == true {
-			return true
-		}
-	}
-	return false
+    for condition in break_conditions {
+        if condition(game_board, origin_coords, destination_coords, legal_moves) == true {
+            return true
+        }
+    }
+    return false
 }
 
 // pre loop condition:
 
 fn white_cant_jump_over(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
-	return game_board.table.at(origin_coords - Coords{1, 0}).shape == .empty_square
+    return game_board.table.at(origin_coords - Coords{1, 0}).shape == .empty_square
 }
 
 
 fn black_cant_jump_over(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
-	return game_board.table.at(origin_coords + Coords{1, 0}).shape == .empty_square
+    return game_board.table.at(origin_coords + Coords{1, 0}).shape == .empty_square
 }
 
 fn en_passant_white(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
-	return EnPassant(destination_coords + Coords{1, 0}) == game_board.en_passant
+    return EnPassant(destination_coords + Coords{1, 0}) == game_board.en_passant
 }
 
 fn en_passant_black(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
-	return EnPassant(destination_coords + Coords{-1, 0}) == game_board.en_passant
+    return EnPassant(destination_coords + Coords{-1, 0}) == game_board.en_passant
 }
 
 fn origin_index_6_row(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
-	return origin_coords.y == 6
+    return origin_coords.y == 6
 }
 
 fn origin_index_1_row(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
-	return origin_coords.y == 1
+    return origin_coords.y == 1
 }
 
 fn destination_no_capture(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
-	return game_board.table.at(destination_coords).color != opposite_color(game_board.table.at(origin_coords).color)
+    return game_board.table.at(destination_coords).color != opposite_color(game_board.table.at(origin_coords).color)
 }
 
 
 fn destination_capture(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
-	return game_board.table.at(destination_coords).color == opposite_color(game_board.table.at(origin_coords).color)
+    return game_board.table.at(destination_coords).color == opposite_color(game_board.table.at(origin_coords).color)
 }
 
 fn destination_no_same_color(game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
-	return game_board.table.at(destination_coords).color != game_board.table.at(origin_coords).color
+    return game_board.table.at(destination_coords).color != game_board.table.at(origin_coords).color
 }
 
 // castling: // update to account for king and rook attacks
 
 fn black_oo (game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
-	to_play := game_board.to_play
-	return game_board.oo['black'] == true &&
-		game_board.table.at(Coords{0, 5}).shape == .empty_square &&
-		game_board.table.at(Coords{0, 6}).shape == .empty_square &&
-		game_board.check[to_play.str()] == false &&
-		!coords_attacked(game_board.table, opposite_color(to_play), Coords{0, 5})
+    to_play := game_board.to_play
+    return game_board.oo['black'] == true &&
+        game_board.table.at(Coords{0, 5}).shape == .empty_square &&
+        game_board.table.at(Coords{0, 6}).shape == .empty_square &&
+        game_board.check[to_play.str()] == false &&
+        !coords_attacked(game_board.table, opposite_color(to_play), Coords{0, 5})
 }
 
 fn white_oo (game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
-	to_play := game_board.to_play
-	return game_board.oo['white'] == true &&
-		game_board.table.at(Coords{7, 5}).shape == .empty_square &&
-		game_board.table.at(Coords{7, 6}).shape == .empty_square &&
-		game_board.check[to_play.str()] == false &&
-		!coords_attacked(game_board.table, opposite_color(to_play), Coords{7, 5})
+    to_play := game_board.to_play
+    return game_board.oo['white'] == true &&
+        game_board.table.at(Coords{7, 5}).shape == .empty_square &&
+        game_board.table.at(Coords{7, 6}).shape == .empty_square &&
+        game_board.check[to_play.str()] == false &&
+        !coords_attacked(game_board.table, opposite_color(to_play), Coords{7, 5})
 }
 
 fn black_ooo (game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
-	to_play := game_board.to_play
-	return game_board.ooo['black'] == true &&
-		game_board.table.at(Coords{0, 1}).shape == .empty_square &&
-		game_board.table.at(Coords{0, 2}).shape == .empty_square &&
-		game_board.table.at(Coords{0, 3}).shape == .empty_square &&
-		game_board.check[to_play.str()] == false &&
-		!coords_attacked(game_board.table, opposite_color(to_play), Coords{0, 3})
+    to_play := game_board.to_play
+    return game_board.ooo['black'] == true &&
+        game_board.table.at(Coords{0, 1}).shape == .empty_square &&
+        game_board.table.at(Coords{0, 2}).shape == .empty_square &&
+        game_board.table.at(Coords{0, 3}).shape == .empty_square &&
+        game_board.check[to_play.str()] == false &&
+        !coords_attacked(game_board.table, opposite_color(to_play), Coords{0, 3})
 }
 
 fn white_ooo (game_board GameBoard, origin_coords Coords, destination_coords Coords) bool {
-	to_play := game_board.to_play
-	return game_board.ooo['white'] == true &&
-		game_board.table.at(Coords{7, 1}).shape == .empty_square &&
-		game_board.table.at(Coords{7, 2}).shape == .empty_square &&
-		game_board.table.at(Coords{7, 3}).shape == .empty_square &&
-		game_board.check[to_play.str()] == false &&
-		!coords_attacked(game_board.table, opposite_color(to_play), Coords{7, 3})
+    to_play := game_board.to_play
+    return game_board.ooo['white'] == true &&
+        game_board.table.at(Coords{7, 1}).shape == .empty_square &&
+        game_board.table.at(Coords{7, 2}).shape == .empty_square &&
+        game_board.table.at(Coords{7, 3}).shape == .empty_square &&
+        game_board.check[to_play.str()] == false &&
+        !coords_attacked(game_board.table, opposite_color(to_play), Coords{7, 3})
 }
 
 // post loop conditions:
 
 fn only_one(game_board GameBoard, origin_coords Coords, destination_coords Coords, legal_moves []Coords) bool {
-	return true
+    return true
 }
 
 fn last_legal_was_capture(game_board GameBoard, origin_coords Coords, destination_coords Coords, legal_moves []Coords) bool {
-	if legal_moves.len == 0 {
-		return false
-	}
-	last_legal_coords := legal_moves[legal_moves.len - 1]
-	if game_board.table.at(last_legal_coords).color in [Color.white, Color.black] {
-		return true
-	}
-	return false
+    if legal_moves.len == 0 {
+        return false
+    }
+    last_legal_coords := legal_moves[legal_moves.len - 1]
+    if game_board.table.at(last_legal_coords).color in [Color.white, Color.black] {
+        return true
+    }
+    return false
 }
 
